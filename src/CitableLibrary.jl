@@ -1,9 +1,12 @@
 module CitableLibrary
 
-import Documenter, DocStringExtensions
+using Documenter, DocStringExtensions
+using CitableBase
 
-export CitableLibraryTrait
+export CitableLibraryTrait, CitableLibraryCollection, NotCitableLibraryCollection
 
-include("retrievable.jl")
+export lookupurn
+
+include("library.jl")
 
 end # module
