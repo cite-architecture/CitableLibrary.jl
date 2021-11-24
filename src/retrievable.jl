@@ -6,3 +6,8 @@
 =#
 
 abstract type CitableLibraryTrait end
+
+# function lookup() ...?
+# function iterate(x::T) {where T....}
+# function iterate(x::T, state) {where T....}
+# function cex() ...?
