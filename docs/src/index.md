@@ -76,8 +76,9 @@ end
 # implement `write` for your URN type instead of directly 
 # manipulating fields.
 function cex(reading::ReadingList)
+    header = "ISBN\n"
     strings = map(ref -> ref.isbn, reading.reff)
-    join(strings, "\n")
+    header * join(strings, "\n")
 end
 ```
 
@@ -95,5 +96,5 @@ urncontains(distant, readingList)
 ```
 
 ```@example citelib
-cex(readingList)
+cex(readingList) |> print
 ```
