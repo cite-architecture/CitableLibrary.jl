@@ -5,4 +5,4 @@
 -   implement `cex` [[serialization]]
 =#
 
-abstract type CitableLibraryTrait
+abstract type CitableLibraryTrait end
