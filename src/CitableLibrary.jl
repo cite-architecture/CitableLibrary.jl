@@ -1,9 +1,15 @@
 module CitableLibrary
 
-import Documenter, DocStringExtensions
+using Documenter, DocStringExtensions
+using CitableBase
 
-export CitableLibraryTrait
+import CitableBase: cex
+import CitableBase: urncontains
 
-include("retrievable.jl")
+export CitableLibraryTrait, CitableLibraryCollection, NotCitableLibraryCollection
+
+export urncontains, urnequals
+
+include("library.jl")
 
 end # module
