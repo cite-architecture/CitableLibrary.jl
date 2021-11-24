@@ -71,8 +71,13 @@ function urncontains(u::IsbnUrn, faves::ReadingList)
     filter(ref -> ref == u, faves.reff)
 end
 
-function cex(reading::ReadlingList)
-    join(reading.reff, "\n")
+# Format as one ISBN string per line.
+# In a real implementation, you would certainly
+# implement `write` for your URN type instead of directly 
+# manipulating fields.
+function cex(reading::ReadingList)
+    strings = map(ref -> ref.isbn, reading.reff)
+    join(strings, "\n")
 end
 ```
 
