@@ -17,27 +17,55 @@ struct NotCitableLibraryCollection <: CitableLibraryTrait end
 """Define default value of CitableLibraryTrait as NotCitableLibraryCollection."""
 CitableLibraryTrait(::Type) = NotCitableLibraryCollection() 
 
-"""Delegate to specific functions based on 
+"""Delegate `urnequals` to specific functions based on 
 type's CitableLibraryTrait value.
 
 $(SIGNATURES)
 """
-function lookupurn(urn::U, x::T) where {T, U <: Urn} 
-    lookupurn(CitableLibraryTrait(T), urn, x)
+function urnequals(urn::U, x::T) where {T, U <: Urn} 
+    urnequals(CitableLibraryTrait(T), urn, x)
 end
 
-
-# Catch attempts to use these functions on NotCitableLibraryCollection:
-"""It is an error to invoke the `lookupurn` function with collections that are not citable.
+"""Delegate `urncontains` to specific functions based on 
+type's CitableLibraryTrait value.
 
 $(SIGNATURES)
 """
-function lookupurn(::NotCitableLibraryCollection, urn::U, x) where {T, U <: Urn} 
+function urncontains(urn::U, x::T) where {T, U <: Urn} 
+    urnequals(CitableLibraryTrait(T), urn, x)
+end
+
+"""Delegate `cex` to specific functions based on 
+type's CitableLibraryTrait value.
+
+$(SIGNATURES)
+"""
+function cex(urn::U, x::T) where {T, U <: Urn} 
+    cex(CitableLibraryTrait(T), urn, x)
+end
+
+# Catch attempts to use these functions on NotCitableLibraryCollection:
+"""It is an error to invoke the `urnequals` function with collections that are not citable.
+
+$(SIGNATURES)
+"""
+function urnequals(::NotCitableLibraryCollection, urn::U, x) where {T, U <: Urn} 
+    throw(DomainError(x, string("Type ", typeof(x), " is not a citable collection.")))
+end
+
+"""It is an error to invoke the `urncontains` function with collections that are not citable.
+
+$(SIGNATURES)
+"""
+function urncontains(::NotCitableLibraryCollection, urn::U, x) where {T, U <: Urn} 
     throw(DomainError(x, string("Type ", typeof(x), " is not a citable collection.")))
 end
 
 
-# function lookup() ...?
-# function iterate(x::T) {where T....}
-# function iterate(x::T, state) {where T....}
-# function cex() ...?
+"""It is an error to invoke the `cex` function with collections that are not citable.
+
+$(SIGNATURES)
+"""
+function cex(::NotCitableLibraryCollection, urn::U, x) where {T, U <: Urn} 
+    throw(DomainError(x, string("Type ", typeof(x), " is not a citable collection.")))
+end

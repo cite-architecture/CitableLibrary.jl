@@ -3,9 +3,12 @@ module CitableLibrary
 using Documenter, DocStringExtensions
 using CitableBase
 
+import CitableBase: cex
+import CitableBase: urncontains
+
 export CitableLibraryTrait, CitableLibraryCollection, NotCitableLibraryCollection
 
-export lookupurn
+export urncontains, urnequals
 
 include("library.jl")
 
