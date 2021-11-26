@@ -10,6 +10,9 @@ export CitableLibraryTrait, CitableLibraryCollection, NotCitableLibraryCollectio
 
 export urncontains, urnequals
 
-include("library.jl")
+export CiteLibrary
+
+include("librarytype.jl")
+include("librarytrait.jl")
 
 end # module
