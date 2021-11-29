@@ -44,12 +44,18 @@ function cex(urn::U, x::T) where {T, U <: Urn}
     cex(CitableLibraryTrait(T), urn, x)
 end
 
+"""True if `x` has the value `CitableLibraryCollection` for the `CitableLibraryTrait`.
 
-
+$(SIGNATURES)
+"""
 function citable(x::T) where {T} 
     citable(CitableLibraryTrait(T), x)
 end
 
+"""True if `x` has the value `CitableLibraryCollection` for the `CitableLibraryTrait`.
+
+$(SIGNATURES)
+"""
 function citable(::CitableLibraryCollection, x)
     true
 end

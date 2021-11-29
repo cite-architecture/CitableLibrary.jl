@@ -3,13 +3,22 @@
 
 ## Construct and work with a `CiteLibrary`
 
+Constructor:
+
 ```@docs
-citableLibrary
-cex
+citeLibrary
 ```
 
 
+
+Serialize a library:
+
+```@docs
+cex
+```
+
 ## Functions operating on citable collections
+
 ```@docs
 urncontains
 urnequals

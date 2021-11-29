@@ -23,7 +23,7 @@ include("librarytrait.jl")
 
 
 ## For debugging:
-include("dummy.jl")
-export IsbnUrn, ReadingList
+#include("dummy.jl")
+#export IsbnUrn, ReadingList
 
 end # module
