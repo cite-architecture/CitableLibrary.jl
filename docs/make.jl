@@ -17,9 +17,9 @@ makedocs(
     sitename="CitableLibrary.jl",
     pages = [
         "Home" => "index.md",
-        
-       
-     
+        "The CitableLibrary" => "library.md",
+        "The CitableLibraryTrait" => "trait.md",
+        "API documentation" => "api.md"
     ],
     )
 

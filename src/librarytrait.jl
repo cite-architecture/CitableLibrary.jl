@@ -32,7 +32,7 @@ type's CitableLibraryTrait value.
 $(SIGNATURES)
 """
 function urncontains(urn::U, x::T) where {T, U <: Urn} 
-    urnequals(CitableLibraryTrait(T), urn, x)
+    urncontains(CitableLibraryTrait(T), urn, x)
 end
 
 """Delegate `cex` to specific functions based on 
@@ -44,13 +44,33 @@ function cex(urn::U, x::T) where {T, U <: Urn}
     cex(CitableLibraryTrait(T), urn, x)
 end
 
+"""True if `x` has the value `CitableLibraryCollection` for the `CitableLibraryTrait`.
+
+$(SIGNATURES)
+"""
+function citable(x::T) where {T} 
+    citable(CitableLibraryTrait(T), x)
+end
+
+"""True if `x` has the value `CitableLibraryCollection` for the `CitableLibraryTrait`.
+
+$(SIGNATURES)
+"""
+function citable(::CitableLibraryCollection, x)
+    true
+end
+
+function citable(::NotCitableLibraryCollection, x)
+    false
+end
+
 # Catch attempts to use these functions on NotCitableLibraryCollection:
 """It is an error to invoke the `urnequals` function with collections that are not citable.
 
 $(SIGNATURES)
 """
 function urnequals(::NotCitableLibraryCollection, urn::U, x) where {T, U <: Urn} 
-    throw(DomainError(x, string("Type ", typeof(x), " is not a citable collection.")))
+    throw(DomainError(x, string("Type ", typeof(x), " does not implement urnequals.")))
 end
 
 """It is an error to invoke the `urncontains` function with collections that are not citable.
@@ -58,7 +78,7 @@ end
 $(SIGNATURES)
 """
 function urncontains(::NotCitableLibraryCollection, urn::U, x) where {T, U <: Urn} 
-    throw(DomainError(x, string("Type ", typeof(x), " is not a citable collection.")))
+    throw(DomainError(x, string("Type ", typeof(x), " does not implement urncontains.")))
 end
 
 
@@ -67,5 +87,5 @@ end
 $(SIGNATURES)
 """
 function cex(::NotCitableLibraryCollection, urn::U, x) where {T, U <: Urn} 
-    throw(DomainError(x, string("Type ", typeof(x), " is not a citable collection.")))
+    throw(DomainError(x, string("Type ", typeof(x), " does not implement cex.")))
 end
