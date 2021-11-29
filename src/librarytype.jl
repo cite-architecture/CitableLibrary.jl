@@ -1,4 +1,4 @@
-
+"""A library with contents citable by URN."""
 struct CiteLibrary
     collections
     libname::AbstractString
@@ -24,6 +24,10 @@ struct CiteLibrary
     end
 end
 
+
+"""Construct a `CiteLibrary`.
+$(SIGNATURES)
+"""
 function citeLibrary(collections; 
     libname::AbstractString = "Automatically assembled citable library",
     baseurn::Cite2Urn = Cite2Urn("urn:cite2:citearchitecture:uuid.v1:"),
@@ -38,20 +42,20 @@ function citeLibrary(collections;
 end
 
 
+"""Serialize contents of `lib` to a CEX string.
 
+$(SIGNATURES)
+"""
 function cex(lib::CiteLibrary; delimiter = "|")
-    lines = ["#!cexversion", string(lib.cexversion),"", ""]
-
-    #=
-
-#!cexversion
-3.0.1
-
-#!citelibrary
-// These values are inserted programmtacally when
-// the CITE library is built:
-name#Homer Multitext project, release 2020i
-urn#urn:cite2:hmt:publications.cex.2020i:all
-license#.
-    =#
+    lines = ["#!cexversion", string(lib.cexversion),"", 
+    "#!citelibrary", 
+    join(["name",lib.libname],  delimiter),
+    join(["urn", lib.liburn], delimiter),
+    join(["license", lib.license], delimiter),
+    ""
+    ]
+    for c in lib.collections
+        push!(lines, cex(c, delimiter = delimiter))
+    end
+    join(lines, "\n")
 end

@@ -12,7 +12,7 @@ export CitableLibraryTrait, CitableLibraryCollection, NotCitableLibraryCollectio
 
 import Base: iterate
 
-export urncontains, urnequals
+export urncontains, urnequals, cex
 export iterate
 export citable
 
@@ -23,7 +23,7 @@ include("librarytrait.jl")
 
 
 ## For debugging:
-#include("dummy.jl")
-#export IsbnUrn, ReadingList
+include("dummy.jl")
+export IsbnUrn, ReadingList
 
 end # module

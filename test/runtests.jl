@@ -18,12 +18,27 @@ using Test
     isbns = [IsbnUrn("urn:isbn:022661283X"),IsbnUrn("urn:isbn:3030234134"),IsbnUrn("urn:isbn:022656875X")]
     readingList = ReadingList(isbns)
 
+
+    # make iterable:
+    function iterate(rlist::ReadingList)
+        (rlist.reff[1], 2)
+    end
+    function iterate(rlist::ReadingList, state)
+        if state > length(rlist.reff)
+            nothing
+        else
+            (rlist.reff[state], state + 1)
+        end
+    end
+
+
     @test CitableLibraryTrait(typeof(readingList)) == CitableLibraryCollection()
     @info(typeof(readingList),CitableLibraryTrait(typeof(readingList)))
-    #= I don't understand why in Test environment
+    #= I don't understand why in the Test environment the
     CitableLibraryTrait for ReadingList type is lost.
+    ?
     =#
+    @test_broken citable(readingList)
     #citelib = citeLibrary([readingList])
-    #@test_broken citelib isa CiteLibrary
-
+    #@test citelib isa CiteLibrary
 end
