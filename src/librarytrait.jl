@@ -32,7 +32,7 @@ type's CitableLibraryTrait value.
 $(SIGNATURES)
 """
 function urncontains(urn::U, x::T) where {T, U <: Urn} 
-    urnequals(CitableLibraryTrait(T), urn, x)
+    urncontains(CitableLibraryTrait(T), urn, x)
 end
 
 """Delegate `cex` to specific functions based on 

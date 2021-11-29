@@ -3,15 +3,16 @@
 
 ## Construct and work with a `CiteLibrary`
 
-Constructor:
 
 ```@docs
 citeLibrary
+collectiontypes
+collections
 ```
 
 
 
-Serialize a library:
+### Serialize a library
 
 ```@docs
 cex

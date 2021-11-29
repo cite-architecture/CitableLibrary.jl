@@ -10,14 +10,14 @@ To make the collection searchable and serializable, the type should support the 
 
 In this example, we'll create a collection type for a reading list of books, and make it comply with the `CitableLibraryTrait`.  To do that, we'll need to use both the `CitableLibrary` and `CitableBase` packages.
 
-```@example citelib
+```@example citetrait
 using CitableLibrary
 using CitableBase
 ```
 
 The `CitableLibraryTrait` requires us to be able to find contain by URN values. We could use existing implementations of the `URN` abstraction (such as the `Cite2Urn` and the `CtsUrn`), but for this example we'll invent our own URN type. Our `ReadingList` type will be nothing more than a list of those URN values.
 
-```@example citelib
+```@example citetrait
 struct IsbnUrn <: Urn
     isbn::AbstractString
 end
@@ -29,7 +29,7 @@ end
 
 Now we can instantiate a `ReadingList`.
 
-```@example citelib
+```@example citetrait
 isbns = [IsbnUrn("urn:isbn:022661283X"),IsbnUrn("urn:isbn:3030234134"),IsbnUrn("urn:isbn:022656875X")]
 readingList = ReadingList(isbns)
 ```
@@ -37,21 +37,21 @@ readingList = ReadingList(isbns)
 The next step is to define that our new type fulfills the `CitableLibraryTrait`.
 
 
-```@example citelib
+```@example citetrait
 import CitableLibrary: CitableLibraryTrait
 CitableLibraryTrait(::Type{ReadingList}) = CitableLibraryCollection()
 ```
 
 We can verify that we've done that correctly.
 
-```@example citelib
+```@example citetrait
 CitableLibraryTrait(typeof(readingList))
 ```
 
 This can also be verified using the `citable` function:
 
 
-```@example citelib
+```@example citetrait
 citable(readingList)
 ```
 
@@ -59,7 +59,7 @@ citable(readingList)
 
 Now we need to define specific methods for the three functions `urnequals`, `urncontains` and `cex`.  First we *import* them (rather than *using* them).
 
-```@example citelib
+```@example citetrait
 import CitableLibrary: urnequals
 import CitableLibrary: urncontains
 import CitableLibrary: cex
@@ -68,7 +68,7 @@ import CitableLibrary: cex
 
 All our implementation needs to do is specify the correct type for our collection.  (For ISBN URNs, we've chosen to implement `urncontains` and `urnequals` similarly, but you can define URN containment in whatever way is appropriate for the URN type you are using.)
 
-```@example citelib
+```@example citetrait
 # Returns one IsbnUrn or nothing
 function urnequals(u::IsbnUrn, faves::ReadingList)
     filtered = filter(ref -> ref == u, faves.reff)
@@ -94,7 +94,7 @@ end
 Finally, we should also implement the `Base.iterate` method.
 
 
-```@example citelib
+```@example citetrait
 import Base: iterate
 
 function iterate(rlist::ReadingList)
@@ -114,7 +114,7 @@ Let's test our new type.
 
 `urnequals` returns a single object or `nothing`.
 
-```@example citelib
+```@example citetrait
 # URN we'll search for:
 distant = isbns[1]
 urnequals(distant, readingList)
@@ -122,19 +122,19 @@ urnequals(distant, readingList)
 
 `urncontains` returns a (possibly empty) Vector.
 
-```@example citelib
+```@example citetrait
 urncontains(distant, readingList)
 ```
 
 `cex` returns a text block. This demo returns only an unhelpful list of values with a header line.
 
-```@example citelib
+```@example citetrait
 cex(readingList) |> print
 ```
 
 Iteration:
 
-```@example citelib
+```@example citetrait
 for isbn in readingList
    println(isbn)
 end

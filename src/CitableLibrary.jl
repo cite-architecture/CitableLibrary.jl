@@ -1,29 +1,31 @@
 module CitableLibrary
 
-using Documenter, DocStringExtensions
-using CitableBase, CitableObject
+import Base: iterate
+import Base: show
 
+using CitableObject
 using Random, UUIDs
 
+using CitableBase
 import CitableBase: cex
 import CitableBase: urncontains
 
+using Documenter, DocStringExtensions
+
+
+# Citable trait:
 export CitableLibraryTrait, CitableLibraryCollection, NotCitableLibraryCollection
-
-import Base: iterate
-
 export urncontains, urnequals, cex
 export iterate
 export citable
 
+
+# Cite library:
 export CiteLibrary, citeLibrary
+export collectiontypes, collections
+export libname, liburn, license, cexversion
 
-include("librarytype.jl")
 include("librarytrait.jl")
-
-
-## For debugging:
-#include("dummy.jl")
-#export IsbnUrn, ReadingList
+include("librarytype.jl")
 
 end # module
