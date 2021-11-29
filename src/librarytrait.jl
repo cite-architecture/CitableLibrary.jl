@@ -44,6 +44,20 @@ function cex(urn::U, x::T) where {T, U <: Urn}
     cex(CitableLibraryTrait(T), urn, x)
 end
 
+
+
+function citable(x::T) where {T} 
+    citable(CitableLibraryTrait(T), x)
+end
+
+function citable(::CitableLibraryCollection, x)
+    true
+end
+
+function citable(::NotCitableLibraryCollection, x)
+    false
+end
+
 # Catch attempts to use these functions on NotCitableLibraryCollection:
 """It is an error to invoke the `urnequals` function with collections that are not citable.
 

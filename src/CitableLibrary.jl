@@ -10,13 +10,20 @@ import CitableBase: urncontains
 
 export CitableLibraryTrait, CitableLibraryCollection, NotCitableLibraryCollection
 
-
+import Base: iterate
 
 export urncontains, urnequals
+export iterate
+export citable
 
 export CiteLibrary, citeLibrary
 
 include("librarytype.jl")
 include("librarytrait.jl")
+
+
+## For debugging:
+#include("dummy.jl")
+#export IsbnUrn, ReadingList
 
 end # module

@@ -10,8 +10,9 @@ struct CiteLibrary
         libname, liburn, license, cexvers::VersionNumber)
         @info("Initialized libary")
         for coll in collectionlist
-            if CitableLibraryTrait(typeof(coll)) != CitableLibraryCollection()
-                #@info(typeof(coll),CitableLibraryTrait(typeof(coll)) )
+            #if CitableLibraryTrait(typeof(coll)) != CitableLibraryCollection()
+            if ! citable(coll)
+                @info(typeof(coll),CitableLibraryTrait(typeof(coll)) )
                 msg = "Type does not implement CitableLibraryTrait: $(typeof(coll))"
                 DomainError(typeof(coll), msg) |> throw
 
@@ -33,17 +34,13 @@ function citeLibrary(collections;
     uuid = uuid1(rng) |> string
     libid = replace(uuid, "-" => "_")
 
-    CiteLibrary(collections, libname, addobject(baseurn, libid), license, cexversion)
-
-
-
-    
+    CiteLibrary(collections, libname, addobject(baseurn, libid), license, cexversion)    
 end
 
 
 
-function cex(lib)
-    
+function cex(lib::CiteLibrary; delimiter = "|")
+    lines = ["#!cexversion", string(lib.cexversion),"", ""]
 
     #=
 
