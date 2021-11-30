@@ -2,15 +2,16 @@
 struct CiteLibrary
     collections
     libname::AbstractString
-    liburn::Cite2Urn
+    liburn
     license::AbstractString
     cexversion::VersionNumber
 
     function CiteLibrary(collectionlist, 
         libname, liburn, license, cexvers::VersionNumber)
-        #@info("Initialized libary")
+        if ! (typeof(liburn) <: Urn)
+            throw(DomainError(liburn, " is not a Urn."))
+        end
         for coll in collectionlist
-            #if CitableLibraryTrait(typeof(coll)) != CitableLibraryCollection()
             if ! citable(coll)
                 #@info(typeof(coll),CitableLibraryTrait(typeof(coll)) )
                 msg = "Type does not implement CitableLibraryTrait: $(typeof(coll))"
@@ -34,7 +35,7 @@ end
 """URN identifying library.
 $(SIGNATURES)
 """
-function liburn(lib::CiteLibrary)::Cite2Urn
+function liburn(lib::CiteLibrary)
     lib.liburn
 end
 
@@ -75,15 +76,14 @@ $(SIGNATURES)
 """
 function citeLibrary(collections; 
     libname::AbstractString = "Automatically assembled citable library",
-    baseurn::Cite2Urn = Cite2Urn("urn:cite2:citearchitecture:uuid.v1:"),
+    liburn = nothing,
     license::AbstractString = "Creative Commons Attribution, Non-Commercial 4.0 License <https://creativecommons.org/licenses/by-nc/4.0/>",
-    cexversion::VersionNumber = v"3.0.2")
-
-    rng = MersenneTwister(1234)
-    uuid = uuid1(rng) |> string
-    libid = replace(uuid, "-" => "_")
-
-    CiteLibrary(collections, libname, addobject(baseurn, libid), license, cexversion)    
+    cexversion::VersionNumber = v"3.0.2"
+    )
+    if isnothing(liburn)
+        liburn = CitableLibrary.uuidUrn()
+    end
+    CiteLibrary(collections, libname, liburn, license, cexversion)    
 end
 
 

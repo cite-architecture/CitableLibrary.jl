@@ -3,7 +3,6 @@ module CitableLibrary
 import Base: iterate
 import Base: show
 
-using CitableObject
 using Random, UUIDs
 
 using CitableBase
@@ -18,7 +17,7 @@ export CitableLibraryTrait, CitableLibraryCollection, NotCitableLibraryCollectio
 export urncontains, urnequals, cex, fromcex
 export iterate
 export citable
-
+export urn, label
 
 # Cite library:
 export CiteLibrary, citeLibrary
@@ -27,5 +26,6 @@ export libname, liburn, license, cexversion
 
 include("librarytrait.jl")
 include("librarytype.jl")
+include("uuidurn.jl")
 
 end # module

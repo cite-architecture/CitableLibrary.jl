@@ -59,9 +59,9 @@ function fromcex(src::AbstractString, ReadingList)
 end
 
 isbns = [IsbnUrn("urn:isbn:022661283X"),IsbnUrn("urn:isbn:3030234134"),IsbnUrn("urn:isbn:022656875X")]
-readingList = ReadingList(isbns)
+rl = ReadingList(isbns)
 
-citelib = citeLibrary([readingList])
+citelib = citeLibrary([rl])
 ```
 
 
