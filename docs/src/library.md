@@ -116,9 +116,21 @@ urncontains(urn, citelib, ReadingList)
 
 ## Serialize
 
+A library can be serialized to CEX format.
+
 ```@example citelib
-cex(citelib)
+cex(citelib) |> print
 ```
+
+
+Individual collections can be instantiated from complete CEX blocks.
+
+
+!!! warning
+
+    `fromcex` is not yet implemented for an entire library. Follow this [issue in the issue tracker](https://github.com/cite-architecture/CitableLibrary.jl/issues/12).
+
+Instantiate a `ReadingList` from a CEX block:
 
 ```@example citelib
 block = """#!fakecexblock
