@@ -26,3 +26,11 @@ urnequals
 iterate
 citable
 ```
+
+## Internals
+
+
+```@docs
+CitableLibrary.UuidUrn
+CitableLibrary.uuidUrn
+```
