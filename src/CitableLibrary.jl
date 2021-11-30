@@ -15,7 +15,7 @@ using Documenter, DocStringExtensions
 
 # Citable trait:
 export CitableLibraryTrait, CitableLibraryCollection, NotCitableLibraryCollection
-export urncontains, urnequals, cex
+export urncontains, urnequals, cex, fromcex
 export iterate
 export citable
 

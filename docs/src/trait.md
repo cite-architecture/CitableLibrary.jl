@@ -34,8 +34,19 @@ isbns = [IsbnUrn("urn:isbn:022661283X"),IsbnUrn("urn:isbn:3030234134"),IsbnUrn("
 readingList = ReadingList(isbns)
 ```
 
-The next step is to define that our new type fulfills the `CitableLibraryTrait`.
 
+To print and display our custom type, it can be convenient to override `Base.show`.
+
+```@example citetrait
+import Base: show
+function show(io::IO, u::IsbnUrn)
+    print(io, u.isbn)
+end
+```
+
+### Defining a `CitableLibraryTrait`
+
+The first step is to define that our new type fulfills the `CitableLibraryTrait`.
 
 ```@example citetrait
 import CitableLibrary: CitableLibraryTrait
@@ -50,23 +61,25 @@ CitableLibraryTrait(typeof(readingList))
 
 This can also be verified using the `citable` function:
 
-
 ```@example citetrait
 citable(readingList)
 ```
 
+### Implementing the four required functions
 
-
-Now we need to define specific methods for the three functions `urnequals`, `urncontains` and `cex`.  First we *import* them (rather than *using* them).
+Now we need to define specific methods for the four functions `urnequals`, `urncontains`, `cex` and `fromcex`.  First we *import* them (rather than *using* them). Note that we need to import `cex` and `fromcex` from `CitableBase`.
 
 ```@example citetrait
 import CitableLibrary: urnequals
 import CitableLibrary: urncontains
-import CitableLibrary: cex
+import CitableBase: cex
+import CitableBase: fromcex
 ```
 
 
-All our implementation needs to do is specify the correct type for our collection.  (For ISBN URNs, we've chosen to implement `urncontains` and `urnequals` similarly, but you can define URN containment in whatever way is appropriate for the URN type you are using.)
+### Selection by URN logic
+
+All our implementation needs to do is specify the correct types for our urn and our collection.  (For ISBN URNs, we've chosen to implement `urncontains` and `urnequals` similarly, but you can define URN containment in whatever way is appropriate for the URN type you are using.)
 
 ```@example citetrait
 # Returns one IsbnUrn or nothing
@@ -79,17 +92,67 @@ end
 function urncontains(u::IsbnUrn, faves::ReadingList)
     filter(ref -> ref == u, faves.reff)
 end
+```
 
+
+Let's test our new functions.  `urnequals` returns a single object or `nothing`.
+
+```@example citetrait
+# URN we'll search for:
+distant = isbns[1]
+urnequals(distant, readingList)
+```
+
+`urncontains` returns a (possibly empty) Vector.
+
+```@example citetrait
+urncontains(distant, readingList)
+```
+
+
+### Serialization to CEX
+
+A real application would serialize a citable collection to one of the defined blocks of a CEX document.  For this demo, we'll use a fake block heading, and serialize our URNs one per line.
+
+```@example citetrait
 # Format as one ISBN string per line.
-# In a real implementation, you would certainly
-# implement `write` for your URN type instead of directly 
-# manipulating fields.
 function cex(reading::ReadingList)
-    header = "ISBN\n"
+    header = "#!fakecexblock\n"
     strings = map(ref -> ref.isbn, reading.reff)
     header * join(strings, "\n")
 end
 ```
+
+```@example citetrait
+# Instantiate a ReadingList from CEX:
+function fromcex(src::AbstractString, ReadingList)
+    isbns = []
+    lines = split(src, "\n")
+    for i in 2:length(lines)
+        push!(isbns,IsbnUrn(lines[i]))
+    end
+    ReadingList(isbns)
+end
+```
+
+`cex` returns a text block. This demo returns a simple list of values with a header line.
+
+```@example citetrait
+cex(readingList) |> print
+```
+
+`fromcex` reads a CEX block and instantiates a collection.
+
+```@example citetrait
+block = """#!fakecexblock
+urn:isbn:022661283X
+urn:isbn:3030234134
+urn:isbn:022656875X
+"""
+fromcex(block, ReadingList)
+```
+
+### Iteration
 
 Finally, we should also implement the `Base.iterate` method.
 
@@ -110,27 +173,7 @@ function iterate(rlist::ReadingList, state)
 end
 ```
 
-Let's test our new type.
 
-`urnequals` returns a single object or `nothing`.
-
-```@example citetrait
-# URN we'll search for:
-distant = isbns[1]
-urnequals(distant, readingList)
-```
-
-`urncontains` returns a (possibly empty) Vector.
-
-```@example citetrait
-urncontains(distant, readingList)
-```
-
-`cex` returns a text block. This demo returns only an unhelpful list of values with a header line.
-
-```@example citetrait
-cex(readingList) |> print
-```
 
 Iteration:
 

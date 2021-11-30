@@ -91,7 +91,7 @@ end
 
 $(SIGNATURES)
 """
-function cex(lib::CiteLibrary; delimiter = "|")
+function cex(lib::CiteLibrary; delimiter = "|") 
     lines = ["#!cexversion", string(lib.cexversion),"", 
     "#!citelibrary", 
     join(["name",lib.libname],  delimiter),
