@@ -3,6 +3,7 @@
 - the `CitableLibraryTrait`, and consequently  defines a `lookup` function, with a single parameter that is `<: Urn`.
 -   implements `iterate`  [[iterables]]
 -   implement `cex` [[serialization]]
+-   implement `fromcex` [[serialization]]
 =#
 
 """Abstraction of values for a citable library collection trait."""
