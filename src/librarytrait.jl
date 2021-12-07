@@ -1,9 +1,13 @@
 #= A retrievable collection implements:
 
-- the `CitableLibraryTrait`, and consequently  defines a `lookup` function, with a single parameter that is `<: Urn`.
--   implements `iterate`  [[iterables]]
--   implement `cex` [[serialization]]
--   implement `fromcex` [[serialization]]
+- the `CitableLibraryTrait`, and consequently  defines the URN lookup functions:
+    - `urnequals`
+    - `urncontains`
+- implements `iterate`  [[iterables]]
+- implements the `CexTrait` with the functions:
+    -   `cex` 
+    -   `fromcex`
+- additionally, `fromblock`, `toblock`
 =#
 
 """Abstraction of values for a citable library collection trait."""
