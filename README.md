@@ -4,11 +4,12 @@
 
 A citable collection:
 
-- implements the `CitableLibraryTrait`, and its URN lookup functions:
+- implements the `CitableLibraryTrait`, and its serialization functions `fromblock`, `toblock`
+- implements `UrnComparisonTrait` and:
     - `urnequals`
-    - `urncontains` (shared with with `UrnComparable`)
+    - `urncontains`
+    - `urnsimilar`
 - implements `iterate`  
 - implements the `CexTrait` with the functions:
     -   `cex` 
     -   `fromcex`
-- additionally, `fromblock`, `toblock`
