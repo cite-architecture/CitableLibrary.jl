@@ -6,18 +6,20 @@ import Base: show
 using Random, UUIDs
 
 using CitableBase
-import CitableBase: cex
-import CitableBase: urncontains
+
+#import CitableBase: cex
+# import CitableBase: urncontains
 
 using Documenter, DocStringExtensions
 
 
 # Citable trait:
 export CitableLibraryTrait, CitableLibraryCollection, NotCitableLibraryCollection
-export urncontains, urnequals, cex, fromcex
-export iterate
+#export urncontains, urnequals, cex, fromcex
+#export iterate
 export citable
-export urn, label
+#export urn, label
+export fromblocks, toblocks
 
 # Cite library:
 export CiteLibrary, citeLibrary

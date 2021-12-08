@@ -2,7 +2,7 @@
 struct CiteLibrary
     collections
     libname::AbstractString
-    liburn
+    liburn::U where {U <: Urn}
     license::AbstractString
     cexversion::VersionNumber
 

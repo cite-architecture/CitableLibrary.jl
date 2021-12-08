@@ -2,11 +2,11 @@
 
 The  `CitableLibraryTrait` applies to collections of content that can be retrieved by reference to URNs. Implementations of the `CitableLibraryTrait` can be searched by URN value, can be serialized to CEX format, and can be iterated using Julia's generic `Iteration` interface.
 
-To comply with Julia's `Iteration` interface, types supporting the `CitableLibraryTrait` should implement at least `iterate(iter)` and `iterate(iter, state)`:  see the [Julia documentation](https://docs.julialang.org/en/v1/manual/interfaces/).
+To comply with Julia's `Iterators` interface, types supporting the `CitableLibraryTrait` should implement at least `iterate(iter)` and `iterate(iter, state)`:  see the [Julia documentation](https://docs.julialang.org/en/v1/manual/interfaces/).
 
 To make the collection searchable and serializable, the type should support the `urnequals`, `urncontains` and `cex` functions.  The following example illustrates how you can do that.
 
-## How to implement the CitableLibraryTrait
+## How to implement the `CitableLibraryTrait`
 
 In this example, we'll create a collection type for a reading list of books, and make it comply with the `CitableLibraryTrait`.  To do that, we'll need to use both the `CitableLibrary` and `CitableBase` packages.
 
@@ -21,20 +21,8 @@ The `CitableLibraryTrait` requires us to be able to find contain by URN values. 
 struct IsbnUrn <: Urn
     isbn::AbstractString
 end
-
-struct ReadingList
-    reff::Vector{IsbnUrn}
-end
-```
-
-Now we can instantiate a `ReadingList`.
-
-```@example citetrait
 isbns = [IsbnUrn("urn:isbn:022661283X"),IsbnUrn("urn:isbn:3030234134"),IsbnUrn("urn:isbn:022656875X")]
-readingList = ReadingList(isbns)
 ```
-
-
 To print and display our custom type, it can be convenient to override `Base.show`.
 
 ```@example citetrait
@@ -42,7 +30,22 @@ import Base: show
 function show(io::IO, u::IsbnUrn)
     print(io, u.isbn)
 end
+isbns[1]
 ```
+
+
+A `ReadingList` will maintain a Vector of these `IsbnUrn`s.
+
+```@example citetrait
+struct ReadingList
+    reff::Vector{IsbnUrn}
+end
+readingList = ReadingList(isbns)
+```
+
+
+
+
 
 ### Defining a `CitableLibraryTrait`
 
@@ -65,15 +68,38 @@ This can also be verified using the `citable` function:
 citable(readingList)
 ```
 
-### Implementing the four required functions
+## Implement the required functions
 
-Now we need to define specific methods for the four functions `urnequals`, `urncontains`, `cex` and `fromcex`.  First we *import* them (rather than *using* them). Note that we need to import `cex` and `fromcex` from `CitableBase`.
+### Iteration
+
+We should also implement the `Base.iterate` method for our collection.
+
 
 ```@example citetrait
-import CitableLibrary: urnequals
-import CitableLibrary: urncontains
-import CitableBase: cex
-import CitableBase: fromcex
+import Base: iterate
+
+function iterate(rlist::ReadingList)
+    (rlist.reff[1], 2)
+end
+
+function iterate(rlist::ReadingList, state)
+    if state > length(rlist.reff)
+        nothing
+    else
+        (rlist.reff[state], state + 1)
+    end
+end
+```
+
+```@example citetrait
+for item in readingList
+    println(item)
+end
+```
+
+```@example citetrait
+import CitableLibrary: toblocks
+import CitableLibrary: fromblocks
 ```
 
 
@@ -82,6 +108,9 @@ import CitableBase: fromcex
 All our implementation needs to do is specify the correct types for our urn and our collection.  (For ISBN URNs, we've chosen to implement `urncontains` and `urnequals` similarly, but you can define URN containment in whatever way is appropriate for the URN type you are using.)
 
 ```@example citetrait
+import CitableBase: urnequals
+import CitableBase: urncontains
+import CitableBase: urnsimilar
 # Returns one IsbnUrn or nothing
 function urnequals(u::IsbnUrn, faves::ReadingList)
     filtered = filter(ref -> ref == u, faves.reff)
@@ -90,6 +119,11 @@ end
 
 # Returns a (possibly empty) list of IsbnUrns
 function urncontains(u::IsbnUrn, faves::ReadingList)
+    filter(ref -> ref == u, faves.reff)
+end
+
+# Returns a (possibly empty) list of IsbnUrns
+function urnsimilar(u::IsbnUrn, faves::ReadingList)
     filter(ref -> ref == u, faves.reff)
 end
 ```
@@ -152,33 +186,27 @@ urn:isbn:022656875X
 fromcex(block, ReadingList)
 ```
 
-### Iteration
-
-Finally, we should also implement the `Base.iterate` method.
+### `CitableLibraryTrait` functions
 
 
 ```@example citetrait
-import Base: iterate
+import CitableLibrary: toblocks
+import CitableLibrary: fromblocks
 
-function iterate(rlist::ReadingList)
-    (rlist.reff[1], 2)
+function fromblocks(src::AbstractString, ReadingList)
+    fromcex(src, ReadingList)
 end
 
-function iterate(rlist::ReadingList, state)
-    if state > length(rlist.reff)
-        nothing
-    else
-        (rlist.reff[state], state + 1)
-    end
+function toblocks(reading::ReadingList)
+    cex(reading)
 end
 ```
-
-
-
-Iteration:
 
 ```@example citetrait
-for isbn in readingList
-   println(isbn)
-end
+cexstring = toblocks(readingList)
 ```
+
+```@example citetrait
+list2 = fromblocks(cexstring, ReadingList)
+```
+
