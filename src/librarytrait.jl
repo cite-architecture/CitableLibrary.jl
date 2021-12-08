@@ -1,14 +1,3 @@
-#= A retrievable collection implements:
-
-- the `CitableLibraryTrait`, and consequently  defines the URN lookup functions:
-    - `urnequals`
-    - `urncontains`
-- implements `iterate`  [[iterables]]
-- implements the `CexTrait` with the functions:
-    -   `cex` 
-    -   `fromcex`
-- additionally, `fromblock`, `toblock`
-=#
 
 """Abstraction of values for a citable library collection trait."""
 abstract type CitableLibraryTrait end
@@ -22,31 +11,22 @@ struct NotCitableLibraryCollection <: CitableLibraryTrait end
 """Define default value of CitableLibraryTrait as NotCitableLibraryCollection."""
 CitableLibraryTrait(::Type) = NotCitableLibraryCollection() 
 
-"""Delegate `urnequals` to specific functions based on 
+"""Delegate `fromblocks` to specific functions based on 
 type's CitableLibraryTrait value.
 
 $(SIGNATURES)
 """
-function urnequals(urn::U, x::T) where {T, U <: Urn} 
-    urnequals(CitableLibraryTrait(T), urn, x)
+function fromblocks(blocks, T) where {T} 
+    fromblocks(CitableLibraryTrait(T), blocks)
 end
 
-"""Delegate `urncontains` to specific functions based on 
+"""Delegate `toblocks` to specific functions based on 
 type's CitableLibraryTrait value.
 
 $(SIGNATURES)
 """
-function urncontains(urn::U, x::T) where {T, U <: Urn} 
-    urncontains(CitableLibraryTrait(T), urn, x)
-end
-
-"""Delegate `cex` to specific functions based on 
-type's CitableLibraryTrait value.
-
-$(SIGNATURES)
-"""
-function cex(urn::U, x::T) where {T, U <: Urn} 
-    cex(CitableLibraryTrait(T), urn, x)
+function toblocks(x::T) where {T} 
+    toblocks(CitableLibraryTrait(T), x)
 end
 
 """True if `x` has the value `CitableLibraryCollection` for the `CitableLibraryTrait`.
@@ -69,6 +49,8 @@ function citable(::NotCitableLibraryCollection, x)
     false
 end
 
+
+#=
 # Catch attempts to use these functions on NotCitableLibraryCollection:
 """It is an error to invoke the `urnequals` function with collections that are not citable.
 
@@ -94,3 +76,4 @@ $(SIGNATURES)
 function cex(::NotCitableLibraryCollection, urn::U, x) where {T, U <: Urn} 
     throw(DomainError(x, string("Type ", typeof(x), " does not implement cex.")))
 end
+=#

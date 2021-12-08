@@ -10,12 +10,11 @@ collectiontypes
 collections
 ```
 
-
-
 ### Serialize a library
 
 ```@docs
-cex
+toblocks
+fromblocks
 ```
 
 ## Functions operating on citable collections
