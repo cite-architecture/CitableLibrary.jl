@@ -11,13 +11,14 @@ struct NotCitableLibraryCollection <: CitableLibraryTrait end
 """Define default value of CitableLibraryTrait as NotCitableLibraryCollection."""
 CitableLibraryTrait(::Type) = NotCitableLibraryCollection() 
 
+
 """Delegate `fromblocks` to specific functions based on 
 type's CitableLibraryTrait value.
 
 $(SIGNATURES)
 """
-function fromblocks(blocks, T) where {T} 
-    fromblocks(CitableLibraryTrait(T), blocks)
+function fromblocks(cexblocks, T)
+    fromblocks(CitableLibraryTrait(T), cexblocks)
 end
 
 """Delegate `toblocks` to specific functions based on 

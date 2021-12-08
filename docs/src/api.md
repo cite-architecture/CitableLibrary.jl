@@ -10,24 +10,15 @@ collectiontypes
 collections
 ```
 
-### Serialize a library
+## Functions operating on citable collections
 
 ```@docs
+citable
 toblocks
 fromblocks
 ```
 
-## Functions operating on citable collections
-
-```@docs
-urncontains
-urnequals
-iterate
-citable
-```
-
 ## Internals
-
 
 ```@docs
 CitableLibrary.UuidUrn
