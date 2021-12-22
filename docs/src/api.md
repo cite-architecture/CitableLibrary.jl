@@ -13,7 +13,7 @@ collections
 ## Functions operating on citable collections
 
 ```@docs
-citable
+citablecollection
 toblocks
 fromblocks
 ```

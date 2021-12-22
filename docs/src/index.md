@@ -1,20 +1,23 @@
 # CitableLibrary.jl
 
 
-The two main elements of the package are:
+The  `CitableLibrary` package defines a type, the `CiteLibrary`, which includes one or more *collections of citable resources*
 
-1. the `CitableLibrary` type
-2. the `CitableLibraryTrait`
-
-
-They are documented in the following pages.
+Collections of citable resources (or more briefly, *citable collections*) must implement four kinds of behavior.
 
 
-A citable library works with citable library collections. These collections implement a number of functions:
+- *iteration*. Citable collections can be used with any Julia functions working with iterable collections.
+- *URN comparison* Collections can be queried by filtering their identifiers with URN logic.
+- *serialization* of individual collections. Individual citable collections can be be losslessly serialized to plain-text representation in CEX format and instantiated from the same plain-text representation
 
-- Julia's `iterate`  
-- the three functions of the `UrnComparisonTrait`, `urnequals`, `urncontains` and `urnsimilar`
-- the `CexTrait`'s two functions `cex` and `fromcex`
--  the serialization functions of `CitableLibraryTrait`,  `fromblock` and `toblock`
 
+
+> Or maybe this isn't real?
+>
+> - *serializing entire libraries* 
+
+
+
+
+The following pages provide a working example. They first define a custom type of citable collection, then implement each of the required behaviors, and finally add a collection to a `CiteLibrary`, and show some ways it can be used.
 

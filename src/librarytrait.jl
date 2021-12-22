@@ -34,7 +34,7 @@ end
 
 $(SIGNATURES)
 """
-function citable(x::T) where {T} 
+function citablecollection(x::T) where {T} 
     citable(CitableLibraryTrait(T), x)
 end
 

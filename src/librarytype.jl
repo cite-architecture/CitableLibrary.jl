@@ -12,7 +12,7 @@ struct CiteLibrary
             throw(DomainError(liburn, " is not a Urn."))
         end
         for coll in collectionlist
-            if ! citable(coll)
+            if ! citablecollection(coll)
                 #@info(typeof(coll),CitableLibraryTrait(typeof(coll)) )
                 msg = "Type does not implement CitableLibraryTrait: $(typeof(coll))"
                 DomainError(typeof(coll), msg) |> throw
