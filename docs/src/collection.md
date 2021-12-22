@@ -47,14 +47,23 @@ length(rl.reff)
 ## Recognizing behaviors
 
 
-CitableLibraryTrait
+Note that `Isbn10Urn` is a subtype of `Urn`. This makes the `Isbn10Urn` recognizable as fulfilling the `UrnComparableTrait`, meaing that objects of that type can be compared using URN logic.
+(On the next page, we'll look at how to implement URN comparison for our `Isbn10Urn` type, as well as for our collection type, `ReadingList`.)  We can verify this with the `urncomparable` function from `CitableBase`.
 
-
-
-Note that `Isbn10Urn` is a subtype of `Urn`: this makes objects of that type recognizable as values we can compare using URN logic.
 
 ```@example citelib
 urncomparable(distanthorizons)
 ```
 
-On the next page, we'll look at how to implement URN comparison for our `Isbn10Urn` type, and for our collection type, `ReadingList`.
+
+By contrast, citable collections do not all fall within a single type hierarchy.  We will instead identify them using a trait. 
+
+
+We first identify our `ReadingList` type as fulfilling this trait by importing the `CitableLibraryTrait` type and assigning it a value of `CitableLibraryCollection()` for our `ReadingList`.  We can test whether this assignment is recognized with the `citablecollection` function.
+
+```@example citelib
+import CitableLibrary: CitableLibraryTrait
+CitableLibraryTrait(::Type{ReadingList}) = CitableLibraryCollection()
+
+citablecollection(rl)
+```

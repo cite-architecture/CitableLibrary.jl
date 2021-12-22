@@ -35,9 +35,12 @@ end
 $(SIGNATURES)
 """
 function citablecollection(x::T) where {T} 
-    citable(CitableLibraryTrait(T), x)
+    CitableLibraryTrait(T) != NotCitableLibraryCollection()
+    #citable(CitableLibraryTrait(T), x)
 end
 
+
+#=
 """True if `x` has the value `CitableLibraryCollection` for the `CitableLibraryTrait`.
 
 $(SIGNATURES)
@@ -49,7 +52,7 @@ end
 function citable(::NotCitableLibraryCollection, x)
     false
 end
-
+=#
 
 #=
 # Catch attempts to use these functions on NotCitableLibraryCollection:
