@@ -72,76 +72,12 @@ citable(readingList)
 
 ### Iteration
 
-We should also implement the `Base.iterate` method for our collection.
-
-
-```@example citetrait
-import Base: iterate
-
-function iterate(rlist::ReadingList)
-    (rlist.reff[1], 2)
-end
-
-function iterate(rlist::ReadingList, state)
-    if state > length(rlist.reff)
-        nothing
-    else
-        (rlist.reff[state], state + 1)
-    end
-end
-```
-
-```@example citetrait
-for item in readingList
-    println(item)
-end
-```
 
 ```@example citetrait
 import CitableLibrary: toblocks
 import CitableLibrary: fromblocks
 ```
 
-
-### Selection by URN logic
-
-All our implementation needs to do is specify the correct types for our urn and our collection.  (For ISBN URNs, we've chosen to implement `urncontains` and `urnequals` similarly, but you can define URN containment in whatever way is appropriate for the URN type you are using.)
-
-```@example citetrait
-import CitableBase: urnequals
-import CitableBase: urncontains
-import CitableBase: urnsimilar
-# Returns one Isbn10Urn or nothing
-function urnequals(u::Isbn10Urn, faves::ReadingList)
-    filtered = filter(ref -> ref == u, faves.reff)
-    isempty(filtered) ? nothing : filtered[1]
-end
-
-# Returns a (possibly empty) list of Isbn10Urns
-function urncontains(u::Isbn10Urn, faves::ReadingList)
-    filter(ref -> ref == u, faves.reff)
-end
-
-# Returns a (possibly empty) list of Isbn10Urns
-function urnsimilar(u::Isbn10Urn, faves::ReadingList)
-    filter(ref -> ref == u, faves.reff)
-end
-```
-
-
-Let's test our new functions.  `urnequals` returns a single object or `nothing`.
-
-```@example citetrait
-# URN we'll search for:
-distant = isbns[1]
-urnequals(distant, readingList)
-```
-
-`urncontains` returns a (possibly empty) Vector.
-
-```@example citetrait
-urncontains(distant, readingList)
-```
 
 
 ### Serialization to CEX

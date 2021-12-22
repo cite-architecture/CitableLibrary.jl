@@ -1,3 +1,28 @@
+
+
+
+```@setup cex
+using CitableLibrary
+using CitableBase
+
+struct Isbn10Urn <: Urn
+    isbn::AbstractString
+end
+
+distanthorizons = Isbn10Urn("urn:isbn:022661283X")
+quantitativeintertextuality = Isbn10Urn("urn:isbn:3030234134")
+enumerations = Isbn10Urn("urn:isbn:022656875X")
+wrong = Isbn10Urn("urn:isbn:1108922036")
+jane = Isbn10Urn("urn:isbn:0141395203") # Because all computational literary analysis is required to use Jane Austen as an example
+
+struct ReadingList
+    reff::Vector{Isbn10Urn}
+end
+
+rl = ReadingList([distanthorizons,enumerations, enumerations, wrong, jane])
+```
+
+
 # The `CitableLibrary`
 
 

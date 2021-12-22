@@ -7,7 +7,7 @@ For this example, we'll define a custom type of citable collection that we'll us
 The [ISBN-10 format](https://en.wikipedia.org/wiki/International_Standard_Book_Number) is incredibly complicated, with each of its four components being variable in length.    We'll restrict ourselves to ISBNs for books published in English-, French- or German-speaking countries, indicated by an initial digit of `0` or `1` (English), `2` (French) or `3` (German).  
 
 
-!!! warn
+!!! warning
 
     In a real program, we would enforce this limitation with appropriate validation of the constructor, but to keep this example brief and focused on the requirements of citable collections, we'll pass through strings to the constructor unchecked.
 
@@ -33,6 +33,19 @@ end
 rl = ReadingList([distanthorizons,enumerations, enumerations, wrong, jane])
 length(rl.reff)
 ```
+
+
+As a convenience, we'll implement the equality function `==` for our new type.  We'll define two `ReadingList`s as equivalent if their `reff` fields have equivalent content.
+
+
+
+```@example citelib
+import Base.==
+function ==(rl1::ReadingList, rl2::ReadingList)
+    r1.reff == r2.reff
+end
+```
+
 
 Note that `Isbn10Urn` is a subtype of `Urn`: this makes objects of that type recognizable as values we can compare using URN logic.
 
