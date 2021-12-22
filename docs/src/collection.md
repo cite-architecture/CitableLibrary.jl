@@ -12,6 +12,9 @@ The [ISBN-10 format](https://en.wikipedia.org/wiki/International_Standard_Book_N
     In a real program, we would enforce this limitation with appropriate validation of the constructor, but to keep this example brief and focused on the requirements of citable collections, we'll pass through strings to the constructor unchecked.
 
 
+As a convenience, we'll implement the equality function `==` for our new type.  We'll define two `ReadingList`s as equivalent if their `reff` fields have equivalent content.
+
+
 ```@example citelib
 using CitableLibrary
 using CitableBase
@@ -30,21 +33,22 @@ struct ReadingList
     reff::Vector{Isbn10Urn}
 end
 
+import Base.==
+function ==(rl1::ReadingList, rl2::ReadingList)
+    r1.reff == r2.reff
+end
+
 rl = ReadingList([distanthorizons,enumerations, enumerations, wrong, jane])
 length(rl.reff)
 ```
 
 
-As a convenience, we'll implement the equality function `==` for our new type.  We'll define two `ReadingList`s as equivalent if their `reff` fields have equivalent content.
+
+## Recognizing behaviors
 
 
+CitableLibraryTrait
 
-```@example citelib
-import Base.==
-function ==(rl1::ReadingList, rl2::ReadingList)
-    r1.reff == r2.reff
-end
-```
 
 
 Note that `Isbn10Urn` is a subtype of `Urn`: this makes objects of that type recognizable as values we can compare using URN logic.

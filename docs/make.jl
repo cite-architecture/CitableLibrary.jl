@@ -20,9 +20,8 @@ makedocs(
         "Citable collections" => "collection.md",
         "Filtering with URN logic" => "urncomparison.md",
         "Iteration" => "iteration.md",
-        "Serializing a citable collection" => "cex1.md",
-        "Serializing a library" => "cex2.md",
-        "The CitableLibrary" => "library.md",
+        "Serializing a citable collection" => "cex.md",
+        "The CiteLibrary" => "library.md",
         "QUARRY FOR The CitableLibraryTrait" => "trait.md",
         "API documentation" => "api.md"
     ],

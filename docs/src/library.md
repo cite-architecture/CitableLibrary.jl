@@ -1,7 +1,7 @@
 
 
 
-```@setup cex
+```@setup lib
 using CitableLibrary
 using CitableBase
 
@@ -23,57 +23,52 @@ rl = ReadingList([distanthorizons,enumerations, enumerations, wrong, jane])
 ```
 
 
-# The `CitableLibrary`
+# The `CiteLibrary`
+
+Once we have a list of citable collections, we can build a library as easily as passing the list to the `citeLibrary` function.
 
 
-
-
-isbns = [Isbn10Urn("urn:isbn:022661283X"),Isbn10Urn("urn:isbn:3030234134"),Isbn10Urn("urn:isbn:022656875X")]
-rl = ReadingList(isbns)
-
-citelib = citeLibrary([rl])
-
-
-
+```@example lib
+lib = citeLibrary([rl])
 ```
-citelib
-```
+
 
 ## Library metadata
 
-```
+```@example lib
 libname(citelib)
 ```
 
-```
+```@example lib
 liburn(citelib)
 ```
-```
+
+```@example lib
 license(citelib)
 ```
 
-```
+```@example lib
 cexversion(citelib)
 ```
 
 
 ## Find out about collections in library
 
-```
+```@example lib
 collectiontypes(citelib)
 ```
 
-```
+```@example lib
 collections(citelib)
 ```
 
-```
+```@example lib
 collections(citelib, ReadingList)
 ```
 
 ## Query library by URN value
 
-```
+```@example lib
 urn = Isbn10Urn("urn:isbn:022661283X")
 urnequals(urn, citelib, ReadingList)
 ```
