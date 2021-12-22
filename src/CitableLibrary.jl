@@ -7,6 +7,8 @@ using Random, UUIDs
 
 using CitableBase
 
+
+import CitableBase: contains
 #import CitableBase: cex
 # import CitableBase: urncontains
 
