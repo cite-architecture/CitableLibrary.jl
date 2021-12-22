@@ -1,6 +1,3 @@
-
-
-
 ```@setup lib
 using CitableLibrary
 using CitableBase
@@ -18,6 +15,8 @@ jane = Isbn10Urn("urn:isbn:0141395203") # Because all computational literary ana
 struct ReadingList
     reff::Vector{Isbn10Urn}
 end
+import CitableLibrary: CitableLibraryTrait
+CitableLibraryTrait(::Type{ReadingList}) = CitableLibraryCollection()
 
 rl = ReadingList([distanthorizons,enumerations, enumerations, wrong, jane])
 ```
@@ -29,7 +28,7 @@ Once we have a list of citable collections, we can build a library as easily as 
 
 
 ```@example lib
-lib = citeLibrary([rl])
+citelib = citeLibrary([rl])
 ```
 
 
@@ -68,9 +67,11 @@ collections(citelib, ReadingList)
 
 ## Query library by URN value
 
-```@example lib
+?? Next version??
+
+```
 urn = Isbn10Urn("urn:isbn:022661283X")
-urnequals(urn, citelib, ReadingList)
+#urnequals(urn, citelib, ReadingList)
 ```
 
 
