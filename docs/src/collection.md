@@ -1,10 +1,10 @@
 # Citable collections
 
-A `CiteLibrary` has a list of 0 or more citable collections. Citable collections can be queried using URN logic because their contents in turn must be citable objects.  
+A `CiteLibrary` has a list of zero or more citable collections. Citable collections can be queried using URN logic because their contents must in turn be citable objects.  
 
-We'll define a custom type of citable collection that we'll use throughout this documentation.  The type will manage a list of books, identified by their ISBN numbers.  We'll invent our own URN type for ISBN numbers, and define a `ReadingList` type as just a list of these ISBN values.  
+For this example, we'll define a custom type of citable collection that we'll use throughout this documentation.  The type will manage a list of books, identified by their ISBN numbers.  We'll invent our own URN type for ISBN numbers, and define a `ReadingList` type as just a list of these ISBN values.  For our URN type, we'll follow the URN syntax requirements for a URN type named `isbn`.
 
-The [ISBN-10 format](https://en.wikipedia.org/wiki/International_Standard_Book_Number) is incredibly complicated, with each of its four components being variable in length.  We'll restrict ourselves to ISBNs for books in the English language indicated by an initial of `0` or `1`.  
+The [ISBN-10 format](https://en.wikipedia.org/wiki/International_Standard_Book_Number) is incredibly complicated, with each of its four components being variable in length.    We'll restrict ourselves to ISBNs for books published in English-, French- or German-speaking countries, indicated by an initial digit of `0` or `1` (English), `2` (French) or `3` (German).  
 
 
 !!! warn
@@ -16,22 +16,27 @@ The [ISBN-10 format](https://en.wikipedia.org/wiki/International_Standard_Book_N
 using CitableLibrary
 using CitableBase
 
-struct Isbn10EnglishUrn <: Urn
+struct Isbn10Urn <: Urn
     isbn::AbstractString
 end
 
+distanthorizons = Isbn10Urn("urn:isbn:022661283X")
+quantitativeintertextuality = Isbn10Urn("urn:isbn:3030234134")
+enumerations = Isbn10Urn("urn:isbn:022656875X")
+jane = Isbn10Urn("0141395203") # Because all computational literary analysis is required to use Jane Austen as an example
+
 struct ReadingList
-    reff::Vector{Isbn10EnglishUrn}
+    reff::Vector{Isbn10Urn}
 end
-isbns = [Isbn10EnglishUrn("urn:isbn:022661283X"),Isbn10EnglishUrn("urn:isbn:3030234134"),Isbn10EnglishUrn("urn:isbn:022656875X")]
-rl = ReadingList(isbns)
+
+rl = ReadingList([distanthorizons,enumerations, enumerations, jane])
+length(rl.reff)
 ```
 
-Note that `Isbn10EnglishUrn` is a subtype of `Urn`: this makes objects of that type recognizable as values we can compare using URN logic.
+Note that `Isbn10Urn` is a subtype of `Urn`: this makes objects of that type recognizable as values we can compare using URN logic.
 
 ```@example citelib
-distanthorizons = isbns[1]
 urncomparable(distanthorizons)
 ```
 
-On the next page, we'll look at how to implement URN comparison for our `Isbn10EnglishUrn` type, and for our collection type, `ReadingList`.
+On the next page, we'll look at how to implement URN comparison for our `Isbn10Urn` type, and for our collection type, `ReadingList`.

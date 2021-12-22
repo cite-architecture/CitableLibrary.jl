@@ -3,7 +3,7 @@
 
 
 
-isbns = [Isbn10EnglishUrn("urn:isbn:022661283X"),Isbn10EnglishUrn("urn:isbn:3030234134"),Isbn10EnglishUrn("urn:isbn:022656875X")]
+isbns = [Isbn10Urn("urn:isbn:022661283X"),Isbn10Urn("urn:isbn:3030234134"),Isbn10Urn("urn:isbn:022656875X")]
 rl = ReadingList(isbns)
 
 citelib = citeLibrary([rl])
@@ -49,7 +49,7 @@ collections(citelib, ReadingList)
 ## Query library by URN value
 
 ```
-urn = Isbn10EnglishUrn("urn:isbn:022661283X")
+urn = Isbn10Urn("urn:isbn:022661283X")
 urnequals(urn, citelib, ReadingList)
 ```
 
@@ -88,8 +88,12 @@ fromcex(block, ReadingList)
 
 ```
 import Base: show
-function show(io::IO, u::Isbn10EnglishUrn)
+function show(io::IO, u::Isbn10Urn)
     print(io, u.isbn)
 end
 
 ```
+
+function show(io::IO, u::Isbn10Urn)
+    print(io, u.isbn)
+end

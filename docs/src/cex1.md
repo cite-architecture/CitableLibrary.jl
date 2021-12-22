@@ -24,7 +24,7 @@ function fromcex(src::AbstractString, ReadingList)
     isbns = []
     lines = split(src, "\n")
     for i in 2:length(lines)
-        push!(isbns,Isbn10EnglishUrn(lines[i]))
+        push!(isbns,Isbn10Urn(lines[i]))
     end
     ReadingList(isbns)
 end

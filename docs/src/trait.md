@@ -18,27 +18,27 @@ using CitableBase
 The `CitableLibraryTrait` requires us to be able to find contain by URN values. We could use existing implementations of the `URN` abstraction (such as the `Cite2Urn` and the `CtsUrn`), but for this example we'll invent our own URN type. Our `ReadingList` type will be nothing more than a list of those URN values.
 
 ```@example citetrait
-struct Isbn10EnglishUrn <: Urn
+struct Isbn10Urn <: Urn
     isbn::AbstractString
 end
-isbns = [Isbn10EnglishUrn("urn:isbn:022661283X"),Isbn10EnglishUrn("urn:isbn:3030234134"),Isbn10EnglishUrn("urn:isbn:022656875X")]
+isbns = [Isbn10Urn("urn:isbn:022661283X"),Isbn10Urn("urn:isbn:3030234134"),Isbn10Urn("urn:isbn:022656875X")]
 ```
 To print and display our custom type, it can be convenient to override `Base.show`.
 
 ```@example citetrait
 import Base: show
-function show(io::IO, u::Isbn10EnglishUrn)
+function show(io::IO, u::Isbn10Urn)
     print(io, u.isbn)
 end
 isbns[1]
 ```
 
 
-A `ReadingList` will maintain a Vector of these `Isbn10EnglishUrn`s.
+A `ReadingList` will maintain a Vector of these `Isbn10Urn`s.
 
 ```@example citetrait
 struct ReadingList
-    reff::Vector{Isbn10EnglishUrn}
+    reff::Vector{Isbn10Urn}
 end
 readingList = ReadingList(isbns)
 ```
@@ -111,19 +111,19 @@ All our implementation needs to do is specify the correct types for our urn and 
 import CitableBase: urnequals
 import CitableBase: urncontains
 import CitableBase: urnsimilar
-# Returns one Isbn10EnglishUrn or nothing
-function urnequals(u::Isbn10EnglishUrn, faves::ReadingList)
+# Returns one Isbn10Urn or nothing
+function urnequals(u::Isbn10Urn, faves::ReadingList)
     filtered = filter(ref -> ref == u, faves.reff)
     isempty(filtered) ? nothing : filtered[1]
 end
 
-# Returns a (possibly empty) list of Isbn10EnglishUrns
-function urncontains(u::Isbn10EnglishUrn, faves::ReadingList)
+# Returns a (possibly empty) list of Isbn10Urns
+function urncontains(u::Isbn10Urn, faves::ReadingList)
     filter(ref -> ref == u, faves.reff)
 end
 
-# Returns a (possibly empty) list of Isbn10EnglishUrns
-function urnsimilar(u::Isbn10EnglishUrn, faves::ReadingList)
+# Returns a (possibly empty) list of Isbn10Urns
+function urnsimilar(u::Isbn10Urn, faves::ReadingList)
     filter(ref -> ref == u, faves.reff)
 end
 ```
@@ -163,7 +163,7 @@ function fromcex(src::AbstractString, ReadingList)
     isbns = []
     lines = split(src, "\n")
     for i in 2:length(lines)
-        push!(isbns,Isbn10EnglishUrn(lines[i]))
+        push!(isbns,Isbn10Urn(lines[i]))
     end
     ReadingList(isbns)
 end
