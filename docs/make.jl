@@ -22,7 +22,6 @@ makedocs(
         "Iteration" => "iteration.md",
         "Serializing a citable collection" => "cex.md",
         "The CiteLibrary" => "library.md",
-        "QUARRY FOR The CitableLibraryTrait" => "trait.md",
         "API documentation" => "api.md"
     ],
     )

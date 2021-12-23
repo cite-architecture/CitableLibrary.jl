@@ -111,7 +111,7 @@ collections(citelib, ReadingList)
 
 
 
-## Serialize
+## Serializing to CEX
 
 A citable library is serializable to and from CEX.
 
@@ -124,27 +124,12 @@ Therefore we can use the `cex` function to generate a plain-text representation 
 
 ```@example lib
 cexview = cex(citelib)
+println(cexview)
 ```
 
+## Instantiating a whole library from CEX
 
-Individual collections can be instantiated from complete CEX blocks.
+The inverse function of `cex` is `fromcex`: this function can instantiate an entire CITE library from CEX source, given a dictionary mapping different parts of the library's contents to Julia types.
 
+You can build up complex libraries of mixed contents from the simple labelled blocks that CEX defines. Because the parsing of CEX contents for an entire library and assignment of different types of contents to dynamically mapped types can be quite involved, the `fromcex` function for the `CiteLibrary` type is implemented in the `CiteEXchange` package, where it can draw on the CEX parsing functions of that package.  See the [documentation of the `CiteEXchange` package](https://cite-architecture.github.io/CiteEXchange.jl/stable/) for full information about how to use `fromcex` to create a `CiteLibrary`.
 
-
-Instantiate a `ReadingList` from a CEX block:
-
-```
-block = """#!citecollection
-urn:isbn:022661283X
-urn:isbn:3030234134
-urn:isbn:022656875X
-"""
-fromcex(block, ReadingList)
-```
-
-```
-import Base: show
-function show(io::IO, u::Isbn10Urn)
-    print(io, u.isbn)
-end
-```

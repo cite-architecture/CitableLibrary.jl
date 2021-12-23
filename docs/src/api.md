@@ -8,14 +8,14 @@
 library
 collectiontypes
 collections
+license
+cexversion
 ```
 
 ## Functions operating on citable collections
 
 ```@docs
 citablecollection
-toblocks
-fromblocks
 ```
 
 ## Internals

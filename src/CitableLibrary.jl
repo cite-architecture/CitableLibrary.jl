@@ -23,18 +23,15 @@ import CitableBase: urnequals
 
 # Citable trait:
 export CitableLibraryTrait, CitableLibraryCollection, NotCitableLibraryCollection
-#export urncontains, urnequals, cex, fromcex
-#export iterate
 export citablecollection
-#export urn, label
-export fromblocks, toblocks
 
 # Cite library:
 export CiteLibrary, library
 export collectiontypes, collections
-export libname, liburn, license, cexversion
+export license, cexversion
 
 CURRENT_CEX_VERSION = v"3.0.2"
+
 include("librarytrait.jl")
 include("librarytype.jl")
 include("uuidurn.jl")

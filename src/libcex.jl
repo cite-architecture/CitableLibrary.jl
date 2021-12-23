@@ -19,6 +19,3 @@ function cex(lib::CiteLibrary; delimiter = "|")
     end
     join(lines, "\n")
 end
-
-
-
