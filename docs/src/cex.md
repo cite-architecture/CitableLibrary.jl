@@ -80,7 +80,7 @@ Now we'll write a function to instantiate a `ReadingList` from a string source.
 
 ```@example cex
 import CitableBase: fromcex
-function fromcex(src::AbstractString, ReadingList)
+function fromcex(src::AbstractString, ReadingList; delimiter = "|")
     isbns = []
     lines = split(src, "\n")
     inblock = false

@@ -19,3 +19,15 @@ function cex(lib::CiteLibrary; delimiter = "|")
     end
     join(lines, "\n")
 end
+
+
+"""`CiteLibrary` requires additional information to be instantiated from CEX source.  Warn and return `nothing`.
+$(SIGNATURES)
+Required function for `CexTrait`.
+"""
+function fromcex(s::AbstractString, CiteLibrary; delimiter = "|") 
+    msg = """A CiteLibrary cannot be instantiated using `fromcex`.  Please use the `CiteEXchange.citelibrary` instead.
+    """
+    @warn(msg)
+    nothing
+end
