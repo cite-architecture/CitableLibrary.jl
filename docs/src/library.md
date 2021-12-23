@@ -31,6 +31,21 @@ function cex(reading::ReadingList; delimiter = "|")
     header * join(strings, "\n")
 end
 
+import CitableBase: fromcex
+function fromcex(src::AbstractString, ReadingList; delimiter = "|")
+    isbns = []
+    lines = split(src, "\n")
+    inblock = false
+    for ln in lines
+        if ln == "#!citecollection"
+            inblock = true
+        elseif inblock
+            push!(isbns,Isbn10Urn(ln))
+        end 
+    end
+    ReadingList(isbns)
+end
+
 
 rl = ReadingList([distanthorizons,enumerations, enumerations, wrong, jane])
 ```
@@ -129,7 +144,16 @@ println(cexview)
 
 ## Instantiating a whole library from CEX
 
-The inverse function of `cex` is `fromcex`: this function can instantiate an entire CITE library from CEX source, given a dictionary mapping different parts of the library's contents to Julia types.
+For citable objects and citable collections, the inverse function of `cex` is `fromcex`.  In each case, the `fromcex` function instantiates objects of a single type.
 
-You can build up complex libraries of mixed contents from the simple labelled blocks that CEX defines. Because the parsing of CEX contents for an entire library and assignment of different types of contents to dynamically mapped types can be quite involved, the `fromcex` function for the `CiteLibrary` type is implemented in the `CiteEXchange` package, where it can draw on the CEX parsing functions of that package.  See the [documentation of the `CiteEXchange` package](https://cite-architecture.github.io/CiteEXchange.jl/stable/) for full information about how to use `fromcex` to create a `CiteLibrary`.
+Citable libraries, however, need to be able to instantiate many types of citable collections, and therefore cannot be built directly from CEX source with the `fromcex` function.  You can instead use the `CiteEXchange.citelibrary`  function as the inverse of `cex` for citable libraries.   See the [documentation of the `CiteEXchange` package](https://cite-architecture.github.io/CiteEXchange.jl/stable/) for full information about how to use `citelibrary` to create a `CiteLibrary`.
+
+!!! warning
+
+    If you do try to create a `CiteLibrary` with `fromcex`, you will receive a warning, and the function will return `nothing`.
+
+
+```@example lib
+fromcex(cexview, CiteLibrary)
+```
 
