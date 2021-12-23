@@ -15,12 +15,21 @@ jane = Isbn10Urn("urn:isbn:0141395203") # Because all computational literary ana
 struct ReadingList
     reff::Vector{Isbn10Urn}
 end
+
 import CitableLibrary: CitableLibraryTrait
 CitableLibraryTrait(::Type{ReadingList}) = CitableLibraryCollection()
+
+
 
 import CitableBase: CexTrait
 CexTrait(::Type{ReadingList}) = CexSerializable()
 
+import CitableBase: cex
+function cex(reading::ReadingList; delimiter = "|")
+    header = "#!citecollection\n"
+    strings = map(ref -> ref.isbn, reading.reff)
+    header * join(strings, "\n")
+end
 
 
 rl = ReadingList([distanthorizons,enumerations, enumerations, wrong, jane])
@@ -125,7 +134,7 @@ Individual collections can be instantiated from complete CEX blocks.
 Instantiate a `ReadingList` from a CEX block:
 
 ```
-block = """#!fakecexblock
+block = """#!citecollection
 urn:isbn:022661283X
 urn:isbn:3030234134
 urn:isbn:022656875X
@@ -138,5 +147,4 @@ import Base: show
 function show(io::IO, u::Isbn10Urn)
     print(io, u.isbn)
 end
-
 ```

@@ -58,7 +58,7 @@ To serialize our collection to CEX format, we'll compose a `citecollection` type
 
 ```@example cex
 import CitableBase: cex
-function cex(reading::ReadingList)
+function cex(reading::ReadingList; delimiter = "|")
     header = "#!citecollection\n"
     strings = map(ref -> ref.isbn, reading.reff)
     header * join(strings, "\n")
@@ -69,7 +69,7 @@ Let's see what our reading list looks in this format.
 
 ```@example cex
 cexoutput = cex(rl)
-print(cexoutput)
+println(cexoutput)
 ```
 
 Now we'll write a function to instantiate a `ReadingList` from a string source.
