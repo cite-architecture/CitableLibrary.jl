@@ -1,7 +1,7 @@
 name = "CitableLibrary"
 uuid = "6c9315e5-fa4f-4690-b204-3e7a32231dc4"
 authors = ["Neel Smith <dnsmith.neel@gmail.com>"]
-version = "0.3.0"
+version = "0.4.0"
 
 [deps]
 CitableBase = "d6f014bd-995c-41bd-9893-703339864534"
@@ -12,7 +12,7 @@ Test = "8dfed614-e22c-5e08-85e1-65c5234f0b40"
 UUIDs = "cf7118a7-6976-5b1a-9a39-7adc72f591a4"
 
 [compat]
-CitableBase = "6"
+CitableBase = "7"
 DocStringExtensions = "0.8"
 Documenter = "0.27"
 julia = "1"

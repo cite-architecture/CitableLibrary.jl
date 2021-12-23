@@ -1,142 +1,135 @@
-# The `CitableLibrary`
-
-> - a library has a list of 0 or more collection objects implementing the `CitableLibraryTrait`
-> - content can be selected from collections using URN logic
-> - the library can be serialized to plain text in CEX format
-
-This example builds a library with a single citable collection.  The collection is of a type called `ReadingList`, and its contents are a list of ISBN values.  (The following section on the `CitableLibraryTrait` shows you how to implement your own citable collection by walking through the implementation of the `ReadingList` type.)
-
-
-```@setup citelib
+```@setup lib
 using CitableLibrary
 using CitableBase
 
-struct IsbnUrn <: Urn
+struct Isbn10Urn <: Urn
     isbn::AbstractString
 end
-import Base: show
-function show(io::IO, u::IsbnUrn)
-    print(io, u.isbn)
-end
+
+distanthorizons = Isbn10Urn("urn:isbn:022661283X")
+quantitativeintertextuality = Isbn10Urn("urn:isbn:3030234134")
+enumerations = Isbn10Urn("urn:isbn:022656875X")
+wrong = Isbn10Urn("urn:isbn:1108922036")
+jane = Isbn10Urn("urn:isbn:0141395203") # Because all computational literary analysis is required to use Jane Austen as an example
 
 struct ReadingList
-    reff::Vector{IsbnUrn}
+    reff::Vector{Isbn10Urn}
 end
 
 import CitableLibrary: CitableLibraryTrait
-import CitableLibrary: urnequals
-import CitableLibrary: urncontains
 CitableLibraryTrait(::Type{ReadingList}) = CitableLibraryCollection()
 
 
-function urnequals(isbn::IsbnUrn, rlist::ReadingList)
-    matches = filter(i -> i == isbn, rlist.reff)
-    isempty(matches) ? nothing : matches[1]
-end
 
-function urncontains(isbn::IsbnUrn, rlist::ReadingList)
-    filter(i -> i == isbn, rlist.reff)
-end
+import CitableBase: CexTrait
+CexTrait(::Type{ReadingList}) = CexSerializable()
 
-import CitableBase: CitableTrait
-struct IsbnCitable <: CitableTrait end
-CitableTrait(::Type{ReadingList})  = IsbnCitable
-import CitableLibrary: cex
+import CitableBase: cex
 function cex(reading::ReadingList; delimiter = "|")
-    header = "#!fakecexblock\n"
+    header = "#!citecollection\n"
     strings = map(ref -> ref.isbn, reading.reff)
     header * join(strings, "\n")
 end
 
-import CitableBase: fromcex
-function fromcex(src::AbstractString, ReadingList)
-    isbns = []
-    lines = split(src, "\n")
-    for i in 2:length(lines)
-        push!(isbns,IsbnUrn(lines[i]))
-    end
-    ReadingList(isbns)
-end
 
-isbns = [IsbnUrn("urn:isbn:022661283X"),IsbnUrn("urn:isbn:3030234134"),IsbnUrn("urn:isbn:022656875X")]
-rl = ReadingList(isbns)
-
-citelib = citeLibrary([rl])
+rl = ReadingList([distanthorizons,enumerations, enumerations, wrong, jane])
 ```
 
 
-```@example citelib
-citelib
+# The `CiteLibrary`: a citable object
+
+Once we have a list of citable collections, we can build a library as easily as passing the list to the `library` function.
+
+
+```@example lib
+citelib = library([rl])
 ```
 
-## Library metadata
+The library is itself a citable object!
 
-```@example citelib
-libname(citelib)
+```@example lib
+citable(citelib)
 ```
 
-```@example citelib
-liburn(citelib)
+
+
+
+## Finding out about the library
+
+Since the library is a citable object, it implements the `urn` and `label` functions.
+
+```@example lib
+urn(citelib)
 ```
-```@example citelib
+
+```@example lib
+label(citelib)
+```
+
+These values were generated automatically, but you can supply your own values with optional parameters. (See the API documentation for full details.)
+
+```@example lib
+labelledlib = library([rl], libname = "Library id'ed by automatically generated URN, but manually supplied label")
+
+label(labelledlib)
+```
+
+
+
+Default values for other data you can optionally define manually:
+
+```@example lib
 license(citelib)
 ```
 
-```@example citelib
+```@example lib
 cexversion(citelib)
 ```
 
 
-## Find out about collections in library
+## Find out about the library' collections
 
-```@example citelib
+A single library might include collections of multiple types.  You find out what types of collecetions appear in your library.
+
+```@example lib
 collectiontypes(citelib)
 ```
 
-```@example citelib
+Of course you can also get a list of the colletions themselves.
+```@example lib
 collections(citelib)
 ```
 
-```@example citelib
+You can include a second parameter to limit the returned list to collections of a particular type.  This example finds all collections of type `ReadingList`.
+
+```@example lib
 collections(citelib, ReadingList)
 ```
 
-## Query library by URN value
 
-```@example citelib
-urn = IsbnUrn("urn:isbn:022661283X")
-urnequals(urn, citelib, ReadingList)
+
+
+
+
+## Serializing to CEX
+
+A citable library is serializable to and from CEX.
+
+```@example lib
+cexserializable(citelib)
 ```
 
+Therefore we can use the `cex` function to generate a plain-text representation of the library's contents.
 
 
-```@example citelib
-urncontains(urn, citelib, ReadingList)
+```@example lib
+cexview = cex(citelib)
+println(cexview)
 ```
 
-## Serialize
+## Instantiating a whole library from CEX
 
-A library can be serialized to CEX format.
+The inverse function of `cex` is `fromcex`: this function can instantiate an entire CITE library from CEX source, given a dictionary mapping different parts of the library's contents to Julia types.
 
-```@example citelib
-cex(citelib) |> print
-```
+You can build up complex libraries of mixed contents from the simple labelled blocks that CEX defines. Because the parsing of CEX contents for an entire library and assignment of different types of contents to dynamically mapped types can be quite involved, the `fromcex` function for the `CiteLibrary` type is implemented in the `CiteEXchange` package, where it can draw on the CEX parsing functions of that package.  See the [documentation of the `CiteEXchange` package](https://cite-architecture.github.io/CiteEXchange.jl/stable/) for full information about how to use `fromcex` to create a `CiteLibrary`.
 
-
-Individual collections can be instantiated from complete CEX blocks.
-
-
-!!! warning
-
-    `fromcex` is not yet implemented for an entire library. Follow this [issue in the issue tracker](https://github.com/cite-architecture/CitableLibrary.jl/issues/12).
-
-Instantiate a `ReadingList` from a CEX block:
-
-```@example citelib
-block = """#!fakecexblock
-urn:isbn:022661283X
-urn:isbn:3030234134
-urn:isbn:022656875X
-"""
-fromcex(block, ReadingList)
-```

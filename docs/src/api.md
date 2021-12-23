@@ -5,17 +5,17 @@
 
 
 ```@docs
-citeLibrary
+library
 collectiontypes
 collections
+license
+cexversion
 ```
 
 ## Functions operating on citable collections
 
 ```@docs
-citable
-toblocks
-fromblocks
+citablecollection
 ```
 
 ## Internals

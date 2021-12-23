@@ -1,5 +1,5 @@
 """A library with contents citable by URN."""
-struct CiteLibrary
+struct CiteLibrary <: Citable
     collections
     libname::AbstractString
     liburn::U where {U <: Urn}
@@ -12,7 +12,7 @@ struct CiteLibrary
             throw(DomainError(liburn, " is not a Urn."))
         end
         for coll in collectionlist
-            if ! citable(coll)
+            if ! citablecollection(coll)
                 #@info(typeof(coll),CitableLibraryTrait(typeof(coll)) )
                 msg = "Type does not implement CitableLibraryTrait: $(typeof(coll))"
                 DomainError(typeof(coll), msg) |> throw
@@ -24,36 +24,6 @@ struct CiteLibrary
         new(collectionlist, libname, liburn, license, cexvers)
     end
 end
-
-"""Name of library.
-$(SIGNATURES)
-"""
-function libname(lib::CiteLibrary)::AbstractString
-    lib.libname
-end
-
-"""URN identifying library.
-$(SIGNATURES)
-"""
-function liburn(lib::CiteLibrary)
-    lib.liburn
-end
-
-
-"""License for collected material in library as a whole.
-$(SIGNATURES)
-"""
-function license(lib::CiteLibrary)::AbstractString
-    lib.license
-end
-
-"""CEX version to use in serialization.
-$(SIGNATURES)
-"""
-function cexversion(lib::CiteLibrary)::VersionNumber
-    lib.cexversion
-end
-
 
 """Override `Base.show` for `CiteLibrary`.
 $(SIGNATURES)
@@ -73,38 +43,58 @@ end
 
 """Construct a `CiteLibrary`.
 $(SIGNATURES)
+## Optional parameters
+
+- `liburn` Unique identifier for this library. Must be a subtype of `Urn`.
+- `libname` Name of library (value returned by `label`)
+- `license` License. Default is cc-nc-by.
+- `cexversion` Version of the CEX standard used in serializing library. Default is the current version.
+
 """
-function citeLibrary(collections; 
+function library(collections; 
     libname::AbstractString = "Automatically assembled citable library",
     liburn = nothing,
     license::AbstractString = "Creative Commons Attribution, Non-Commercial 4.0 License <https://creativecommons.org/licenses/by-nc/4.0/>",
-    cexversion::VersionNumber = v"3.0.2"
+    cexversion::VersionNumber = CURRENT_CEX_VERSION
     )
     if isnothing(liburn)
         liburn = CitableLibrary.uuidUrn()
     end
+    @warn("Build lib named", libname)
     CiteLibrary(collections, libname, liburn, license, cexversion)    
 end
 
 
-"""Serialize contents of `lib` to a CEX string.
-
+"""Name of library.
 $(SIGNATURES)
+Required function for `CitableTrait`.
 """
-function cex(lib::CiteLibrary; delimiter = "|") 
-    lines = ["#!cexversion", string(lib.cexversion),"", 
-    "#!citelibrary", 
-    join(["name",lib.libname],  delimiter),
-    join(["urn", lib.liburn], delimiter),
-    join(["license", lib.license], delimiter),
-    ""
-    ]
-    for c in lib.collections
-        push!(lines, cex(c, delimiter = delimiter))
-    end
-    join(lines, "\n")
+function label(lib::CiteLibrary)::AbstractString
+    lib.libname
 end
 
+"""URN identifying library.
+Required function for `CitableTrait`.
+$(SIGNATURES)
+"""
+function urn(lib::CiteLibrary)
+    lib.liburn
+end
+
+
+"""License for collected material in library as a whole.
+$(SIGNATURES)
+"""
+function license(lib::CiteLibrary)::AbstractString
+    lib.license
+end
+
+"""CEX version to use in serialization.
+$(SIGNATURES)
+"""
+function cexversion(lib::CiteLibrary)::VersionNumber
+    lib.cexversion
+end
 
 """List types of collections in library.
 $(SIGNATURES)

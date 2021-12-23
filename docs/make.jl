@@ -17,8 +17,11 @@ makedocs(
     sitename="CitableLibrary.jl",
     pages = [
         "Home" => "index.md",
-        "The CitableLibrary" => "library.md",
-        "The CitableLibraryTrait" => "trait.md",
+        "Citable collections" => "collection.md",
+        "Filtering with URN logic" => "urncomparison.md",
+        "Iteration" => "iteration.md",
+        "Serializing a citable collection" => "cex.md",
+        "The CiteLibrary" => "library.md",
         "API documentation" => "api.md"
     ],
     )
