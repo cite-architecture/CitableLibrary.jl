@@ -18,29 +18,56 @@ end
 import CitableLibrary: CitableLibraryTrait
 CitableLibraryTrait(::Type{ReadingList}) = CitableLibraryCollection()
 
+import CitableBase: CexTrait
+CexTrait(::Type{ReadingList}) = CexSerializable()
+
+
+
 rl = ReadingList([distanthorizons,enumerations, enumerations, wrong, jane])
 ```
 
 
-# The `CiteLibrary`
+# The `CiteLibrary`: a citable object
 
-Once we have a list of citable collections, we can build a library as easily as passing the list to the `citeLibrary` function.
+Once we have a list of citable collections, we can build a library as easily as passing the list to the `library` function.
 
 
 ```@example lib
-citelib = citeLibrary([rl])
+citelib = library([rl])
 ```
 
-
-## Library metadata
+The library is itself a citable object!
 
 ```@example lib
-libname(citelib)
+citable(citelib)
+```
+
+
+
+
+## Finding out about the library
+
+Since the library is a citable object, it implements the `urn` and `label` functions.
+
+```@example lib
+urn(citelib)
 ```
 
 ```@example lib
-liburn(citelib)
+label(citelib)
 ```
+
+These values were generated automatically, but you can supply your own values with optional parameters. (See the API documentation for full details.)
+
+```@example lib
+labelledlib = library([rl], libname = "Library id'ed by automatically generated URN, but manually supplied label")
+
+label(labelledlib)
+```
+
+
+
+Default values for other data you can optionally define manually:
 
 ```@example lib
 license(citelib)
@@ -51,50 +78,49 @@ cexversion(citelib)
 ```
 
 
-## Find out about collections in library
+## Find out about the library' collections
+
+A single library might include collections of multiple types.  You find out what types of collecetions appear in your library.
 
 ```@example lib
 collectiontypes(citelib)
 ```
 
+Of course you can also get a list of the colletions themselves.
 ```@example lib
 collections(citelib)
 ```
+
+You can include a second parameter to limit the returned list to collections of a particular type.  This example finds all collections of type `ReadingList`.
 
 ```@example lib
 collections(citelib, ReadingList)
 ```
 
-## Query library by URN value
-
-?? Next version??
-
-```
-urn = Isbn10Urn("urn:isbn:022661283X")
-#urnequals(urn, citelib, ReadingList)
-```
 
 
 
-```
-urncontains(urn, citelib, ReadingList)
-```
+
 
 ## Serialize
 
-A library can be serialized to CEX format.
+A citable library is serializable to and from CEX.
 
+```@example lib
+cexserializable(citelib)
 ```
-cex(citelib) |> print
+
+Therefore we can use the `cex` function to generate a plain-text representation of the library's contents.
+
+
+```@example lib
+cexview = cex(citelib)
 ```
 
 
 Individual collections can be instantiated from complete CEX blocks.
 
 
-!!! warning
-
-    `fromcex` is not yet implemented for an entire library. Follow this [issue in the issue tracker](https://github.com/cite-architecture/CitableLibrary.jl/issues/12).
 
 Instantiate a `ReadingList` from a CEX block:
 
@@ -114,7 +140,3 @@ function show(io::IO, u::Isbn10Urn)
 end
 
 ```
-
-function show(io::IO, u::Isbn10Urn)
-    print(io, u.isbn)
-end

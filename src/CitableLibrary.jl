@@ -7,6 +7,10 @@ import Base: show
 
 using CitableBase
 
+import CitableBase: CitableTrait
+import CitableBase: urn
+import CitableBase: label
+
 import CitableBase: CexTrait
 import CitableBase: cex
 import CitableBase: fromcex
@@ -26,12 +30,14 @@ export citablecollection
 export fromblocks, toblocks
 
 # Cite library:
-export CiteLibrary, citeLibrary
+export CiteLibrary, library
 export collectiontypes, collections
 export libname, liburn, license, cexversion
 
+CURRENT_CEX_VERSION = v"3.0.2"
 include("librarytrait.jl")
 include("librarytype.jl")
 include("uuidurn.jl")
+include("libcex.jl")
 
 end # module

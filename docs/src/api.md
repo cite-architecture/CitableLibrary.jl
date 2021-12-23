@@ -5,7 +5,7 @@
 
 
 ```@docs
-citeLibrary
+library
 collectiontypes
 collections
 ```
