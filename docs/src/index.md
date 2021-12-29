@@ -215,6 +215,13 @@ The  `CitableLibrary` package defines a type, the `CiteLibrary`, which includes 
 
 A `CiteLibrary` can work with any citable collection, containing any kind of citable object, citable by any kind of URN, so long as they fulfill the contract of the `CitableCollectionTrait` from `CitableBase`.  In the following walk through, we'll use the sample collection type that is developed in the [documentation for `CitableBase`](https://cite-architecture.github.io/CitableBase.jl/stable/).
 
+The libary has two CITE traits:
+
+- `CitableTrait`
+- `CexTrait`
+
+Each collections has the `CitableCollectionTrait` which entails `Iterators`, `UrnComparisonTrait`, and `CexTrait`.
+
 
 !!! info "More about the CITE architecture"
 

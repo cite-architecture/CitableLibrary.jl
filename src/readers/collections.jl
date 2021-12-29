@@ -1,5 +1,5 @@
 
-function collectionsdataforurn(citeblocks::Vector{Block}, u::Cite2Urn; delimiter = "|", strict = true)
+function collectionsdataforurn(citeblocks::Vector{CiteEXchange.Block}, u::Cite2Urn; delimiter = "|", strict = true)
     allblocks = blocksfortype("citedata", citeblocks)
     if strict
         @warn("collectionsdataforurn: strict parsing not yet implemented")
@@ -20,7 +20,7 @@ end
 
 
 
-function propertydataforurn(citeblocks::Vector{Block}, u::Cite2Urn; delimiter = "|", strict = true)
+function propertydataforurn(citeblocks::Vector{CiteEXchange.Block}, u::Cite2Urn; delimiter = "|", strict = true)
     allblocks = blocksfortype("citeproperties", citeblocks)
     if strict
         @warn("propertydataforurn: strict parsing not yet implemented")
@@ -116,12 +116,12 @@ function instantiatecollections(cexsrc::AbstractString, typesdict; delimiter = "
 end
 
 
-"""Gather unique set of `Cite2Urn`s identifying collections data from a Vector of `Block`s,
+"""Gather unique set of `Cite2Urn`s identifying collections data from a Vector of `CiteEXchange.Block`s,
 without applying any cross
 checking for consistency of cataloging, property definitions and data sets.
 $(SIGNATURES)
 """
-function laxcollections(blocklist::Vector{Block}; delimiter = "|")::Vector{Cite2Urn}
+function laxcollections(blocklist::Vector{CiteEXchange.Block}; delimiter = "|")::Vector{Cite2Urn}
     collectionurns = []
     # Collect unique URNs for citedata blocks
     datablocks = blocksfortype("citedata", blocklist)
@@ -140,11 +140,11 @@ function laxcollections(blocklist::Vector{Block}; delimiter = "|")::Vector{Cite2
 end
 
 """Gather a (possibly empty) list of `Cite2Urn`s
-identifying all collections in a list of `Block`s.
+identifying all collections in a list of `CiteEXchange.Block`s.
 $(SIGNATURES)
 This needs to examine `citecollections`, `citeproperties`, and `citecdata` blocks.  If `strict` is true, all collections appearing in `citedata` blocks must be cataloged in `citecollections`, and header line must match `citeproperties`.
 """
-function collections(blocklist::Vector{Block}; strict = true, delimiter = "|")::Vector{Cite2Urn}
+function collections(blocklist::Vector{CiteEXchange.Block}; strict = true, delimiter = "|")::Vector{Cite2Urn}
     if strict
         @warn("collections: strict parsing not yet implemented")
         laxcollections(blocklist, delimiter = delimiter)
@@ -155,10 +155,10 @@ end
 
 
 """Gather a (possibly empty) list of `Cite2Urn`s
-identifying all datamodels in a list of `Block`s.
+identifying all datamodels in a list of `CiteEXchange.Block`s.
 $(SIGNATURES)
 """
-function datamodels(blocklist::Vector{Block}; delimiter = "|")
+function datamodels(blocklist::Vector{CiteEXchange.Block}; delimiter = "|")
     dmurns = []
     dmblocks = blocksfortype("datamodels", blocklist)
     for blk in dmblocks
@@ -171,32 +171,32 @@ function datamodels(blocklist::Vector{Block}; delimiter = "|")
 end
 
 
-"""Gather a (possibly empty) list of `Block`s for a given data model.
+"""Gather a (possibly empty) list of `CiteEXchange.Block`s for a given data model.
 $(SIGNATURES)
 This could be multiple blocks for a collection or a relationset.
 """
-function blocksformodel(modelurn::Cite2Urn, blocklist::Vector{Block})
+function blocksformodel(modelurn::Cite2Urn, blocklist::Vector{CiteEXchange.Block})
     nothing
 end
 
 """
 $(SIGNATURES)
 """
-function rawcollections( blocklist::Vector{Block})
+function rawcollections( blocklist::Vector{CiteEXchange.Block})
     nothing
 end
 
 """
 $(SIGNATURES)
 """
-function emptycollections(blocklist::Vector{Block})
+function emptycollections(blocklist::Vector{CiteEXchange.Block})
     nothing
 end
 
 """Gather data lines for a specified collection.
 $(SIGNATURES)
 """
-function dataforcollection(coll::Cite2Urn, blocklist::Vector{Block})
+function dataforcollection(coll::Cite2Urn, blocklist::Vector{CiteEXchange.Block})
     nothing
 end
 
@@ -204,6 +204,6 @@ end
 """Gather catalog data lines for a specified collection.
 $(SIGNATURES)
 """
-function catalogforcollection(coll::Cite2Urn, blocklist::Vector{Block})
+function catalogforcollection(coll::Cite2Urn, blocklist::Vector{CiteEXchange.Block})
     nothing
 end

@@ -2,7 +2,7 @@
 
 $(SIGNATURES)
 """
-function lazycite2urns(citedatablocks::Vector{Block}; delimiter = "|")::Vector{Cite2Urn}
+function lazycite2urns(citedatablocks::Vector{CiteEXchange.Block}; delimiter = "|")::Vector{Cite2Urn}
     urnlist = []
     for dblock in citedatablocks
         for ln in dblock.lines[2:end]
@@ -19,7 +19,7 @@ end
 
 $(SIGNATURES)
 """
-function lazyctsurns(citedatablocks::Vector{Block}; delimiter = "|")::Vector{CtsUrn}
+function lazyctsurns(citedatablocks::Vector{CiteEXchange.Block}; delimiter = "|")::Vector{CtsUrn}
     urnlist = []
     for dblock in citedatablocks
         for ln in dblock.lines[2:end]

@@ -2,9 +2,9 @@
 identifying the set.
 $(SIGNATURES)
 """
-function relationseturn(relationblock::Block; divider = "|")
+function relationseturn(relationblock::CiteEXchange.Block; divider = "|")
     if relationblock.label != "citerelationset"
-        throw(DomainError(relationblock,"Block is not of type `citerelationset`"))
+        throw(DomainError(relationblock,"CiteEXchange.Block is not of type `citerelationset`"))
     else
         parts = split(relationblock.lines[1],divider)
         if parts[1] != "urn"
@@ -19,7 +19,7 @@ end
 $(SIGNATURES)
 Shouldl return a *Vector*.
 """
-function relationsdataforurn(citeblocks::Vector{Block}, u::Cite2Urn; delimiter = "|")
+function relationsdataforurn(citeblocks::Vector{CiteEXchange.Block}, u::Cite2Urn; delimiter = "|")
     allblocks = blocksfortype("citerelationset", citeblocks)
     blocksdata = []
     for blk in allblocks
@@ -96,11 +96,11 @@ end
 
 
 """Gather a (possibly empty) list of `Cite2Urn`s
-identifying all relation sets in a list of `Block`s.
+identifying all relation sets in a list of `CiteEXchange.Block`s.
 $(SIGNATURES)
 If `strict` is true, all relations sets appearing in `relationsets` blocks must appear in a `datamodel` entry.
 """
-function relationsets(blocklist::Vector{Block}; delimiter = "|")#::Vector{Cite2Urn}
+function relationsets(blocklist::Vector{CiteEXchange.Block}; delimiter = "|")#::Vector{Cite2Urn}
     relationurns = []
     relsetblocks = blocksfortype("citerelationset", blocklist)
     for relationblock in relsetblocks

@@ -3,7 +3,7 @@
 $(SIGNATURES)
 Note that URNs of implementations may use URN semantics to map a class of collections of relation sets (e.g. mapping a CITE collection at an abstract collection rather than version level).
 """
-function modeldict(blocklist::Vector{Block}; delimiter = "|")
+function modeldict(blocklist::Vector{CiteEXchange.Block}; delimiter = "|")
     mappings = Dict()
     dms = blocksfortype("datamodels", blocklist)
     for dm in dms
@@ -27,7 +27,7 @@ end
 """Map implementations of models to their model.
 $(SIGNATURES)
 """
-function modelleddict(blocklist::Vector{Block}; delimiter = "|")
+function modelleddict(blocklist::Vector{CiteEXchange.Block}; delimiter = "|")
     mappings = Dict()
     dms = blocksfortype("datamodels", blocklist)
     for dm in dms

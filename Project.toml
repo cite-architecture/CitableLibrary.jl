@@ -5,6 +5,7 @@ version = "0.5.0"
 
 [deps]
 CitableBase = "d6f014bd-995c-41bd-9893-703339864534"
+CitableText = "41e66566-473b-49d4-85b7-da83b66615d8"
 CiteEXchange = "e2e9ead3-1b6c-4e96-b95f-43e6ab899178"
 DocStringExtensions = "ffbed154-4ef7-542d-bbb7-c09d3a79fcae"
 Documenter = "e30172f5-a6a5-5a46-863b-614d45cd2de4"

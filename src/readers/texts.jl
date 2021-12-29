@@ -1,10 +1,10 @@
 
 
-"""Extract from a list of `Block`s ctsdata lines with URNs contained
+"""Extract from a list of `CiteEXchange.Block`s ctsdata lines with URNs contained
 by a given URN.
 $(SIGNATURES)
 """
-function dataforctsurn(citeblocks::Vector{Block}, u::CtsUrn; delimiter = "|")
+function dataforctsurn(citeblocks::Vector{CiteEXchange.Block}, u::CtsUrn; delimiter = "|")
     allblocks = blocksfortype("ctsdata", citeblocks)
     data = []
     for blk in allblocks
@@ -63,11 +63,11 @@ function instantiatetexts(cexsrc::AbstractString, typesdict; delimiter = "|", st
     corpora
 end
 
-"""Read text data from a Vector of `Block`s without any cross
+"""Read text data from a Vector of `CiteEXchange.Block`s without any cross
 checking for consistency of cataloging, property definitions and data sets.
 $(SIGNATURES)
 """
-function laxtexts(blocklist::Vector{Block}; delimiter = "|")::Vector{CtsUrn}
+function laxtexts(blocklist::Vector{CiteEXchange.Block}; delimiter = "|")::Vector{CtsUrn}
     texturns = []
     # Collect unique URNs for ctsdata blocks
     textblocks = blocksfortype("ctsdata", blocklist)
@@ -80,11 +80,11 @@ function laxtexts(blocklist::Vector{Block}; delimiter = "|")::Vector{CtsUrn}
 end
 
 """Gather a (possibly empty) list of `CtsUrn`s
-identifying all texts in a list of `Block`s.
+identifying all texts in a list of `CiteEXchange.Block`s.
 $(SIGNATURES)
 If `strict` is true, all texts appearing in `ctsdata` blocks must be cataloged in a `ctscatalog`.
 """
-function texts(blocklist::Vector{Block}; strict = true, delimiter = "|")::Vector{CtsUrn}
+function texts(blocklist::Vector{CiteEXchange.Block}; strict = true, delimiter = "|")::Vector{CtsUrn}
     if strict
         @warn("Strict parsing not yet implemented")
         laxtexts(blocklist, delimiter = delimiter)
