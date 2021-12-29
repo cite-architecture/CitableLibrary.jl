@@ -5,6 +5,9 @@ version = "0.4.1"
 
 [deps]
 CitableBase = "d6f014bd-995c-41bd-9893-703339864534"
+CitableObject = "e2b2f5ea-1cd8-4ce8-9b2b-05dad64c2a57"
+CitableText = "41e66566-473b-49d4-85b7-da83b66615d8"
+CiteEXchange = "e2e9ead3-1b6c-4e96-b95f-43e6ab899178"
 DocStringExtensions = "ffbed154-4ef7-542d-bbb7-c09d3a79fcae"
 Documenter = "e30172f5-a6a5-5a46-863b-614d45cd2de4"
 Random = "9a3f8284-a2c9-5f02-9a11-845980a1fd5c"
@@ -12,7 +15,10 @@ Test = "8dfed614-e22c-5e08-85e1-65c5234f0b40"
 UUIDs = "cf7118a7-6976-5b1a-9a39-7adc72f591a4"
 
 [compat]
-CitableBase = "7"
+CitableBase = "8"
+CitableObject = "0.11"
+CitableText = "0.14"
+CiteEXchange = "0.7"
 DocStringExtensions = "0.8"
 Documenter = "0.27"
 julia = "1"
