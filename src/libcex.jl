@@ -1,6 +1,10 @@
 
-"""Define type as serializable."""
-CexTrait(::Type{CiteLibrary}) = CexSerializable()
+"""Define `CiteLibrary` type as serializable.
+$(SIGNATURES)
+"""
+function cextrait(::Type{CiteLibrary}) 
+    CexSerializable()
+end
 
 """Serialize contents of `lib` to a CEX string.
 $(SIGNATURES)
@@ -20,14 +24,3 @@ function cex(lib::CiteLibrary; delimiter = "|")
     join(lines, "\n")
 end
 
-
-"""`CiteLibrary` requires additional information to be instantiated from CEX source.  Warn and return `nothing`.
-$(SIGNATURES)
-Required function for `CexTrait`.
-"""
-function fromcex(s::AbstractString, CiteLibrary; delimiter = "|") 
-    msg = """A CiteLibrary cannot be instantiated using `fromcex`.  Please use the `CiteEXchange.citelibrary` instead.
-    """
-    @warn(msg)
-    nothing
-end

@@ -12,11 +12,6 @@ license
 cexversion
 ```
 
-## Functions operating on citable collections
-
-```@docs
-citablecollection
-```
 
 ## Internals
 

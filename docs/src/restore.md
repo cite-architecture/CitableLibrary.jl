@@ -208,109 +208,16 @@ rl = ReadingList(books)
 ```
 
 
-# CitableLibrary.jl
+# Instantiating a library from CEX
 
-
-The  `CitableLibrary` package defines a type, the `CiteLibrary`, which includes one or more *collections of citable resources*. The `CiteLibrary` itself is a *citable object*:  it can be cited by URN, and identified with a human-readable label.  It is also serializable, and can be losslessly represented in CEX format and instantiated from the same plain-text representation.
-
-A `CiteLibrary` can work with any citable collection, containing any kind of citable object, citable by any kind of URN, so long as they fulfill the contract of the `CitableCollectionTrait` from `CitableBase`.  In the following walk through, we'll use the sample collection type that is developed in the [documentation for `CitableBase`](https://cite-architecture.github.io/CitableBase.jl/stable/).
-
-
-!!! info "More about the CITE architecture"
-
-    For an introduction to citable objects, citable collections, and their implementation in Julia, see the [documentation for `CitableBase`](https://cite-architecture.github.io/CitableBase.jl/stable/).
-
-
-## An example collection: the `ReadingList` type
-
-Our example collection is a reading list of citable books instantiated as a citable collection of type `ReadingList`.  Individual books are `CitableBook`s, and are cited by `Isbn10Urn`.  The setup block for this page has created a `ReadingList` with four entries.
-
+The inverse function of `cex` is `fromcex`.  For citable objects and citable collections, the `fromcex` function simply instantiates objects of a single type identified in a parameter. For example, we could instantiate a `CitableBook` like this:
 
 ```@example lib
-rl
+cexoutput = cex(distantbook)
 ```
-
-
-
-## The `CiteLibrary`: a citable object
-
-We can build a library as easily as giving the `library` function a list of citable collections.
-
-
 ```@example lib
-using CitableLibrary
-citelib = library([rl])
+restored = fromcex(cexoutput, CitableBook)
+restored == distantbook
 ```
 
-The library is itself a citable object, as we can verify with the `citable` function from `CitableBase`.
-
-```@example lib
-citable(citelib)
-```
-
-That means we can find a URN and label for the library as whole.
-
-```@example lib
-urn(citelib)
-```
-
-
-```@example lib
-label(citelib)
-```
-
-These values were generated automatically, but you can supply your own values with optional parameters. (See the API documentation for full details.)
-
-```@example lib
-labelledlib = library([rl], libname = "Library id'ed by automatically generated URN, but manually supplied label")
-
-label(labelledlib)
-```
-
-Other metadata about the library that you can optionally define manually include its license and the version of the CEX specification it uses.  Here are  the default values.
-
-```@example lib
-license(citelib)
-```
-
-```@example lib
-cexversion(citelib)
-```
-
-
-## Find out about the library's collections
-
-A single library might include collections of multiple types.  You can find out what types of collections appear in your library with the `collectiontypes` function.
-
-```@example lib
-collectiontypes(citelib)
-```
-
-Of course you can also get a list of the collections themselves.
-```@example lib
-collections(citelib)
-```
-
-You can include a second parameter to limit the returned list to collections of a particular type.  This example finds all collections of type `ReadingList`.
-
-```@example lib
-collections(citelib, ReadingList)
-```
-
-
-## Serializing to CEX
-
-A citable library is serializable to and from CEX.
-
-```@example lib
-cexserializable(citelib)
-```
-
-
-Therefore we can use the `cex` function to generate a plain-text representation of the library's contents.
-
-
-```@example lib
-cexview = cex(citelib)
-println(cexview)
-```
+Citable libraries, however, need to be able to instantiate many types of citable collections, and therefore cannot be built directly from CEX source without more information.

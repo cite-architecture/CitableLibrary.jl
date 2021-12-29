@@ -17,6 +17,7 @@ makedocs(
     sitename="CitableLibrary.jl",
     pages = [
         "Home" => "index.md",
+        "Instantiating a library from CEX" => "restore.md",
         "API documentation" => "api.md"
     ],
     )

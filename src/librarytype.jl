@@ -14,7 +14,7 @@ struct CiteLibrary <: Citable
         for coll in collectionlist
             if ! citablecollection(coll)
                 #@info(typeof(coll),CitableLibraryTrait(typeof(coll)) )
-                msg = "Type does not implement CitableLibraryTrait: $(typeof(coll))"
+                msg = "Type does not implement CitableCollectionTrait: $(typeof(coll))"
                 DomainError(typeof(coll), msg) |> throw
 
             else
@@ -39,6 +39,13 @@ function show(io::IO, lib::CiteLibrary)
         ]
         print(io, join(msglines, "\n"))
     end
+end
+
+
+struct CitableCollectionsLibrary <: CitableTrait end
+import CitableBase: citabletrait
+function citabletrait(::Type{CiteLibrary})
+    CitableCollectionsLibrary()
 end
 
 """Construct a `CiteLibrary`.
