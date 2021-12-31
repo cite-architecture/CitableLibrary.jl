@@ -149,7 +149,7 @@ end
 
 
 function cex(reading::ReadingList; delimiter = "|")
-    header = "#!citecollection\n"
+    header = "#!citedata\n"
     strings = map(ref -> cex(ref, delimiter=delimiter), reading.publications)
     header * join(strings, "\n") * "\n"
 end
@@ -161,7 +161,7 @@ function fromcex(trait::ReadingListCex, cexsrc::AbstractString, T;
     isbns = CitableBook[]
     inblock = false
     for ln in lines
-        if ln == "#!citecollection"
+        if ln == "#!citedata"
             inblock = true
         elseif inblock && !isempty(ln)
             bk = fromcex(ln, CitableBook)
@@ -205,98 +205,56 @@ qibook = CitableBook(qi, "Quantitative Intertextuality: Analyzing the Markers of
 books = [distantbook, enumerationsbook, wrongbook, qibook]
 rl = ReadingList(books)
 
-```
-
-
-# CitableLibrary.jl
-
-
-The  `CitableLibrary` package defines a type, the `CiteLibrary`, which includes one or more *collections of citable resources*. The `CiteLibrary` itself is a *citable object*:  it can be cited by URN, and identified with a human-readable label.  It is also serializable, and can be losslessly represented in CEX format and instantiated from the same plain-text representation.  Stated in terms of the traits defined in `CitableBase`, the `CiteLibrary` has the `CitableTrait` and the `CexTrait`.
-
-A `CiteLibrary` can work with any citable collection, containing any kind of citable object, citable by any kind of URN, so long as the collections fulfill the contract of the `CitableCollectionTrait` which which in turn entails fulfilling `Iterators`, the `UrnComparisonTrait`, and the `CexTrait`.
-
-
-!!! info "More about the CITE architecture"
-
-    For an introduction to citable objects, citable collections, and their implementation in Julia, see the [documentation for `CitableBase`](https://cite-architecture.github.io/CitableBase.jl/stable/).
-
- In the following walk through, we'll use the sample collection type that is developed in the [documentation for `CitableBase`](https://cite-architecture.github.io/CitableBase.jl/stable/).
-
-
-
-## An example collection: the `ReadingList` type
-
-Our example collection is a reading list of citable books instantiated as a citable collection of type `ReadingList`.  Individual books are `CitableBook`s, and are cited by `Isbn10Urn`.  The setup block for this page has created a `ReadingList` with four entries.
-
-
-```@example lib
-rl
-```
-
-
-
-## The `CiteLibrary`: a citable object
-
-We can build a library as easily as giving the `library` function a list of citable collections.
-
-
-```@example lib
 using CitableLibrary
 citelib = library([rl])
 ```
 
-The library is itself a citable object, as we can verify with the `citable` function from `CitableBase`.
+
+# Reading and writing a library
+
+## Serialization to CEX
+
+A citable library is serializable to and from CEX.
 
 ```@example lib
-citable(citelib)
+cexserializable(citelib)
 ```
 
-That means we can find a URN and label for the library as whole.
+Therefore we can use the `cex` function to generate a plain-text representation of the library's contents.
 
 ```@example lib
-urn(citelib)
-```
-
-
-```@example lib
-label(citelib)
-```
-
-These values were generated automatically, but you can supply your own values with optional parameters. (See the API documentation for full details.)
-
-```@example lib
-labelledlib = library([rl], libname = "Library id'ed by automatically generated URN, but manually supplied label")
-
-label(labelledlib)
-```
-
-Other metadata about the library that you can optionally define manually include its license and the version of the CEX specification it uses.  Here are  the default values.
-
-```@example lib
-license(citelib)
-```
-
-```@example lib
-cexversion(citelib)
+cexview = cex(citelib)
+println(cexview)
 ```
 
 
-## Find out about the library's collections
 
-A single library might include collections of multiple types.  You can find out what types of collections appear in your library with the `collectiontypes` function.
+# Instantiating a library from CEX
 
-```@example lib
-collectiontypes(citelib)
-```
-
-Of course you can also get a list of the collections themselves.
-```@example lib
-collections(citelib)
-```
-
-You can include a second parameter to limit the returned list to collections of a particular type.  This example finds all collections of type `ReadingList`.
+The inverse function of `cex` is `fromcex`.  For citable objects and citable collections, the `fromcex` function simply instantiates objects of a single type identified in a parameter. For example, we could instantiate a `CitableBook` like this:
 
 ```@example lib
-collections(citelib, ReadingList)
+cexoutput = cex(distantbook)
+```
+```@example lib
+restored = fromcex(cexoutput, CitableBook)
+restored == distantbook
 ```
 
+Citable libraries, however, need to be able to instantiate not only the `CiteLibrary` type, but the appropriate types of collections for all of its content.  To achieve this, you include the optional `configuration` parameter with a list of `BlockConfig` objects.
+
+
+
+```@example lib
+libcex = cex(citelib)
+```
+
+Model on 1 coll. how to do for all collections in lib:
+
+```@example lib
+conf = [BlockConfig("citecollection", ReadingList, Isbn10Urn, nothing)]
+collcex = "#!citedata\n" * join(data(libcex,"citedata"), "\n")
+fromcex(collcex, conf[1].C)
+
+# restoredlib = fromcex(libcex, CiteLibrary, configuration = conf)
+```

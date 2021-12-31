@@ -29,7 +29,7 @@ export collectiontypes, collections
 export license, cexversion
 
 export CitableCollectionsLibrary
-
+export BlockConfig 
 
 
 CURRENT_CEX_VERSION = v"3.0.2"
@@ -37,6 +37,7 @@ CURRENT_CEX_VERSION = v"3.0.2"
 
 include("librarytype.jl")
 include("uuidurn.jl")
+include("blockconfig.jl")
 include("libcex.jl")
 include("readers/texts.jl")
 
