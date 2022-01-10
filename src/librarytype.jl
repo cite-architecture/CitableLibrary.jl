@@ -103,32 +103,9 @@ function cexversion(lib::CiteLibrary)::VersionNumber
     lib.cexversion
 end
 
-"""List types of collections in library.
-$(SIGNATURES)
-"""
-function collectiontypes(lib::CiteLibrary)
-    typelist = []
-    for c in lib.collections
-        push!(typelist, typeof(c))
-    end
-    unique(typelist)
-end
-
-"""List all collections in the library.
-$(SIGNATURES)
-"""
-function collections(lib::CiteLibrary)
-    lib.collections
-end
-
-"""List all collections in the library of type `T`.
-$(SIGNATURES)
-"""
-function collections(lib::CiteLibrary, T)
-    filter(c -> c isa T, lib.collections)
-end
 
 
+#=
 """Apply `urnequals` to all collections in `lib` of type `T`.
 $(SIGNATURES)
 Returns a possibly empty list of objects.
@@ -170,3 +147,4 @@ function urncontains(urn::U, lib::CiteLibrary, T) where {U <: Urn}
 
     rslts  |> Iterators.flatten |> collect
 end
+=#

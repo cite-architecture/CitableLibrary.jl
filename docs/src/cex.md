@@ -258,3 +258,14 @@ fromcex(collcex, conf[1].C)
 
 # restoredlib = fromcex(libcex, CiteLibrary, configuration = conf)
 ```
+
+# generic
+conf = SectionConfiguration(CollectionSections, ReadingList,nothing)
+
+
+
+# Special
+leadzero = Isbn10("urn:isbn10:0")
+conf2 = [SectionConfiguration(CollectionSections, ReadingList, leadzeros)]
+fromcex(libcex, CiteLibrary, configuration = conf2)
+

@@ -35,21 +35,16 @@ $(SIGNATURES)
 """
 function fromcex(traitvalue::LibraryCex, cexsrc::AbstractString, T;
     delimiter = "|", configuration)
-    strict = haskey(configuration, "strict") ? configuration["strict"]  : false
+    #strict = haskey(configuration, "strict") ? configuration["strict"]  : false
         
     
     #@warn("library: ", strict, typesdict)
-    if strict
-        @warn("library: strict parsing not yet implemented.")
-        strictly = laxlibrary(cexsrc, configuration, delimiter = delimiter)
-        #@warn("result: ", strictly)
-        strictly
-    else
-        #@warn("Going lax")
-        lazily = laxlibrary(cexsrc, configuration, delimiter = delimiter)
-        #@warn("result: ", lazily)
-        lazily
-    end
+
+    #@warn("Going lax")
+    lazily = laxlibrary(cexsrc, configuration, delimiter = delimiter)
+    #@warn("result: ", lazily)
+    lazily
+   
 end
 
 
@@ -61,6 +56,7 @@ $(SIGNATURES)
 """
 function laxlibrary(cexsrc::AbstractString, typesdict; delimiter = "|")
     citables = []
+    #=
     corpora = instantiatetexts(cexsrc, typesdict, delimiter = delimiter, strict = false)
     if ! isempty(corpora)
         push!(citables, corpora)
@@ -70,8 +66,8 @@ function laxlibrary(cexsrc::AbstractString, typesdict; delimiter = "|")
     if ! isempty(relsets)
         push!(citables, relsets)
     end
-
-    citecolls = instantiatecollections(cexsrc, typesdict, delimiter = delimiter, strict = false)
+    =#
+    citecolls = instantiatecollections(cexsrc, typesdict, delimiter = delimiter)
     #collected = []
     if ! isempty(citecolls)
         push!(citables, Iterators.flatten(citecolls) |> collect)
