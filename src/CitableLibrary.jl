@@ -26,19 +26,20 @@ import CitableBase: citabletrait
 # Cite library:
 export CiteLibrary, library
 export collectiontypes, collections
+export sections, insection
 export license, cexversion
 
 export CitableCollectionsLibrary
 
-export SectionConfiguration 
+export SectionConfiguration, LibrarySections 
 export CollectionSections, TextSections, DataModelSections, RelationSections
 
 CURRENT_CEX_VERSION = v"3.0.2"
 
 
+include("sections.jl")
 include("librarytype.jl")
 include("uuidurn.jl")
-include("sections.jl")
 include("libcex.jl")
 
 include("readers/collections.jl")

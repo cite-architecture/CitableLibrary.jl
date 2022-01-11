@@ -1,12 +1,13 @@
 """A library with contents citable by URN."""
 struct CiteLibrary <: Citable
     collections
+    sections
     libname::AbstractString
     liburn::U where {U <: Urn}
     license::AbstractString
     cexversion::VersionNumber
 
-    function CiteLibrary(collectionlist, 
+    function CiteLibrary(collectionlist, sectionlist,
         libname, liburn, license, cexvers::VersionNumber)
         if ! (typeof(liburn) <: Urn)
             throw(DomainError(liburn, " is not a Urn."))
@@ -21,7 +22,7 @@ struct CiteLibrary <: Citable
                 #@info(typeof(coll), CitableLibraryTrait(typeof(coll)))
             end
         end
-        new(collectionlist, libname, liburn, license, cexvers)
+        new(collectionlist, sectionlist, libname, liburn, license, cexvers)
     end
 end
 
@@ -58,7 +59,7 @@ $(SIGNATURES)
 - `cexversion` Version of the CEX standard used in serializing library. Default is the current version.
 
 """
-function library(collections; 
+function library(collections, sections; 
     libname::AbstractString = "Automatically assembled citable library",
     liburn = nothing,
     license::AbstractString = "Creative Commons Attribution, Non-Commercial 4.0 License <https://creativecommons.org/licenses/by-nc/4.0/>",
@@ -67,8 +68,8 @@ function library(collections;
     if isnothing(liburn)
         liburn = CitableLibrary.uuidUrn()
     end
-    @warn("Build lib named", libname)
-    CiteLibrary(collections, libname, liburn, license, cexversion)    
+    @info("Building automatically assembled library")
+    CiteLibrary(collections, sections, libname, liburn, license, cexversion)    
 end
 
 
@@ -89,6 +90,15 @@ function urn(lib::CiteLibrary)
 end
 
 
+
+"""Type of URN identifying library.
+Required function for `CitableTrait`.
+$(SIGNATURES)
+"""
+function urntype(lib::CiteLibrary)
+    typeof(lib.liburn)
+end
+
 """License for collected material in library as a whole.
 $(SIGNATURES)
 """
@@ -103,6 +113,51 @@ function cexversion(lib::CiteLibrary)::VersionNumber
     lib.cexversion
 end
 
+
+"""List types of collections in library.
+$(SIGNATURES)
+"""
+function collectiontypes(lib::CiteLibrary)
+    typelist = []
+    for c in lib.collections
+        push!(typelist, typeof(c))
+    end
+    unique(typelist)
+end
+
+"""List all collections in the library.
+$(SIGNATURES)
+"""
+function collections(lib::CiteLibrary)
+    lib.collections
+end
+
+"""List all collections in the library of type `T`.
+$(SIGNATURES)
+"""
+function collections(lib::CiteLibrary, T)
+    filter(c -> c isa T, lib.collections)
+end
+
+
+
+"""List all collections in the library.
+$(SIGNATURES)
+"""
+function sections(lib::CiteLibrary)
+    lib.sections
+end
+
+"""List all collections in the library in a given CITE Section.
+$(SIGNATURES)
+"""
+function insection(lib::CiteLibrary, section::Type{<: LibrarySections})
+    matchingcollections = []
+    for idx in findall(s -> s == section, lib.sections)
+        push!(matchingcollections, lib.collections[idx])
+    end
+    matchingcollections
+end
 
 
 #=

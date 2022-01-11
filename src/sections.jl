@@ -18,6 +18,5 @@ abstract type RelationSections <: LibrarySections end
 struct SectionConfiguration
     section::Type{<: LibrarySections}
     sectiontype::Type
-    #urntype::Type{<: Urn}
     filter
 end
