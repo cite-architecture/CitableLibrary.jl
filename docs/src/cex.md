@@ -149,13 +149,13 @@ end
 
 
 function cex(reading::ReadingList; delimiter = "|")
-    header = "#!citedata\n"
+    header = "#!citedata\nurn|title|authors\n"
     strings = map(ref -> cex(ref, delimiter=delimiter), reading.publications)
     header * join(strings, "\n") * "\n"
 end
 
 function fromcex(trait::ReadingListCex, cexsrc::AbstractString, T;
-    delimiter = "|", configuration = nothing)
+    delimiter = "|", configuration = nothing, strict = true)
 
     lines = split(cexsrc, "\n")
     isbns = CitableBook[]

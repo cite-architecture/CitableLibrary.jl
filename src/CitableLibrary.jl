@@ -8,7 +8,6 @@ import Base: show
 using CiteEXchange
 
 using CitableBase
-using CitableText
 
 import CitableBase: CitableTrait
 import CitableBase: urn

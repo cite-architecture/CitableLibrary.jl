@@ -1,3 +1,34 @@
+# recursively rm content from cex
+# Need to work by block
+function filtercolldata(blocklist::Vector{Block}, conf, lines = []; omit = true, delimiter = "|")
+    if isempty(conf)
+        join(lines,"\n") * "\n"
+    else
+        # Check source against next filter:
+        filter = conf[1].filter
+        filtertype = typeof(filter)
+        for b in blocklist
+            push!(lines, "#!citedata")
+            push!(lines, b.lines[1])
+            for ln in b.lines[2:end]
+                cols = split(ln, delimiter)
+                lnurn = filtertype(cols[1])
+                if omit
+                    if ! urncontains(filter, lnurn)
+                        push!(lines, ln)
+                    end
+                else
+                    if urncontains(filter, lnurn)
+                        push!(lines, ln)
+                    end
+                end
+            end
+            push!(lines,"")
+        end
+        filtercolldata(blocklist, conf[2:end], lines, delimiter = delimiter)
+    end
+end
+
 
 
 """Instantiate CITE collections from CEX source.
@@ -6,14 +37,36 @@ $(SIGNATURES)
 function instantiatecollections(cexsrc::AbstractString, conf; delimiter = "|")
     
     collectionconfs = filter(conf -> conf.section == CollectionSections, conf)
-    special = filter(conf -> ! isnothing(conf.filter),  collectionconfs)
-    generic = filter(conf -> isnothing(conf.filter),  collectionconfs)
-    @warn("Instantiating collections with special/generic collection configs", special, generic)
+    specialconfs = filter(conf -> ! isnothing(conf.filter),  collectionconfs)
+    # now collect CEX blocks for these URN.
+    #@warn("Special ", specialconfs)
+    datasets = []
+    for specialconf in specialconfs
+        specialcex = filtercolldata(blocks(cexsrc, "citedata"), [specialconf], omit = false)      
+        #@warn("Special cex", specialcex)
+        specialtype = specialconf.sectiontype
+        specialdata = fromcex(specialcex, specialtype)
+        #@warn("Spec data is ", typeof(specialdata))
+        #@warn(collect(specialdata))
+        push!(datasets, specialdata)
+    end
+  
+    
 
 
-
-
-
+    # then collect blocks for data NOT in these urns.
+    genericcex = filtercolldata(blocks(cexsrc, "citedata"), specialconfs, omit = true)
+    #@warn("Generic ", genericcex)
+    
+    genericconf = filter(conf -> isnothing(conf.filter),  collectionconfs)
+    #@warn("Instantiating collections with special/generic collection configs", special, genericconf)
+    # it's an error if more than 1 match!
+    generictype = genericconf[1].sectiontype
+    genericdata = fromcex(genericcex, generictype)
+    #@warn("Generic data is ", typeof(genericdata))
+    #@warn(collect(genericdata))
+    push!(datasets, genericdata)
+    datasets
     #=
     allblocks = blocks(cexsrc)
     collectionurns = collections(allblocks, delimiter = delimiter, strict = false)
@@ -76,7 +129,7 @@ function instantiatecollections(cexsrc::AbstractString, conf; delimiter = "|")
     #@warn("Instantiated collections", instantiated)
     instantiated
     =#
-    []
+    
 end
 
 

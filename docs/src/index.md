@@ -62,6 +62,11 @@ function citabletrait(::Type{CitableBook})
     CitableByIsbn10()
 end
 
+import CitableBase: urntype
+function urntype(book::CitableBook)
+    Isbn10Urn
+end
+
 import CitableBase: urn
 function urn(book::CitableBook)
     book.urn
@@ -122,6 +127,13 @@ struct CitableReadingList <: CitableCollectionTrait end
 import CitableBase: citablecollectiontrait
 function citablecollectiontrait(::Type{ReadingList})
     CitableReadingList()
+end
+
+function citabletrait(rl::CitableReadingList)
+    CitableByIsbn10()
+end
+function urntype(rl::CitableReadingList)
+    Isbn10Urn
 end
 
 struct ReadingListComparable <: UrnComparisonTrait end
@@ -213,14 +225,22 @@ rl = ReadingList(books)
 
 The  `CitableLibrary` package defines a type, the `CiteLibrary`, which includes one or more *collections of citable resources*. The `CiteLibrary` itself is a *citable object*:  it can be cited by URN, and identified with a human-readable label.  It is also serializable, and can be losslessly represented in CEX format and instantiated from the same plain-text representation.  Stated in terms of the traits defined in `CitableBase`, the `CiteLibrary` has the `CitableTrait` and the `CexTrait`.
 
-A `CiteLibrary` can work with any citable collection, containing any kind of citable object, citable by any kind of URN, so long as the collections fulfill the contract of the `CitableCollectionTrait` which which in turn entails fulfilling `Iterators`, the `UrnComparisonTrait`, and the `CexTrait`.
+A `CiteLibrary` works with citable objects and citable collections.  These can be of any type, citable by any type of URN, so long as the objects and collections fulfill the contract of the traits defined in `CitableBase`.
 
 
 !!! info "More about the CITE architecture"
 
     For an introduction to citable objects, citable collections, and their implementation in Julia, see the [documentation for `CitableBase`](https://cite-architecture.github.io/CitableBase.jl/stable/).
 
- In the following walk through, we'll use the sample collection type that is developed in the [documentation for `CitableBase`](https://cite-architecture.github.io/CitableBase.jl/stable/).
+
+A citable library is organized in up to four *sections*, corresponding to the four letters of the CITE architecture acronym:
+
+- *C* **C**ollection**s of discrete citable objects
+- *I* sets of **I**ndexed relations among citable content
+- *T* **T**exts
+- *E* **E**xtended data models for object collections and relation sets
+
+In the following walk through, we'll use the sample collection type that is developed in the [documentation for `CitableBase`](https://cite-architecture.github.io/CitableBase.jl/stable/).
 
 
 

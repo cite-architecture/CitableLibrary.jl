@@ -159,6 +159,13 @@ function insection(lib::CiteLibrary, section::Type{<: LibrarySections})
     matchingcollections
 end
 
+# kludge:
+"""Find URN type of first citable object in a collection.
+$(SIGNATURES)
+"""
+function citableby(coll)
+    collect(coll)[1] |> urntype
+end
 
 #=
 """Apply `urnequals` to all collections in `lib` of type `T`.
