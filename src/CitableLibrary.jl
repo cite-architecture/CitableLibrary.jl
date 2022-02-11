@@ -35,7 +35,7 @@ export CollectionSections, TextSections, DataModelSections, RelationSections
 
 CURRENT_CEX_VERSION = v"3.0.2"
 
-
+include("blocks.jl")
 include("sections.jl")
 include("librarytype.jl")
 include("uuidurn.jl")
