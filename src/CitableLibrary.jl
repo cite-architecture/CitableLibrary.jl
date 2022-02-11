@@ -1,6 +1,7 @@
 module CitableLibrary
 using Documenter, DocStringExtensions
 using Random, UUIDs
+using CitableObject, CitableText
 
 import Base: iterate
 import Base: show
