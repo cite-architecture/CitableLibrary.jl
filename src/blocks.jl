@@ -1,3 +1,4 @@
+
 function configureddata(cexsrc::AbstractString, u::Cite2Urn; delimiter = "|")
     #pool = urnpool(cexsrc, delimiter = delimiter)
     
@@ -8,7 +9,7 @@ function configureddata(cexsrc::AbstractString, u::Cite2Urn; delimiter = "|")
 
 end
 
-
+# TBD ...
 function relsetforurn(cexsrc::AbstractString, u::Cite2Urn; delimiter = "|")
     relblocks = blocks(cexsrc, "citerelationset")
     for rblock in relblocks
