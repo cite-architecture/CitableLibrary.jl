@@ -3987,6 +3987,15 @@ sequence|urn|rv|label|image
 677|urn:cite2:hmt:msB.v1:backflyr|recto|Venetus B: Marcianus Graecus Z. 453 (= 821), back fly leaf, recto|urn:cite2:hmt:vbbifolio.pending:338v_backflyr
 678|urn:cite2:hmt:msB.v1:backflyv|verso|Venetus B: Marcianus Graecus Z. 453 (= 821), back fly leaf, verso|urn:cite2:hmt:vbbifolio.pending:backflyv_backcover
 679|urn:cite2:hmt:msB.v1:backcover|verso|Venetus B: Marcianus Graecus Z. 453 (= 821), inside back cover|urn:cite2:hmt:vbbifolio.pending:backflyv_backcover
+
+
+
+#!datamodels
+Collection|Model|Label|Description
+urn:cite2:cite:datamodels.v1:commentarymodel|urn:cite2:hmt:commentary.v1:all|Relation of commentary to text passages commented on.
+
+
+
 #!citerelationset
 urn|urn:cite2:hmt:commentary.v1:all
 label|Index of scholia to *Iliad* passages they comment on
