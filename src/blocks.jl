@@ -16,8 +16,8 @@ function relsetforurn(cexsrc::AbstractString, u::Cite2Urn; delimiter = "|")
     end
 end
 
-# read citedata in cexsrc, and group into citedatablocks
-# paired with a URN
+"""Read all `citedata` lines in `cexsrc`, and groups them together, paired with a URN for the collection.
+"""
 function reblock(cexsrc; delimiter = "|")
     datablocks = blocks(cexsrc, "citedata")
 
